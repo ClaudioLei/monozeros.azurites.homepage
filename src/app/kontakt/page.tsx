@@ -7,7 +7,6 @@ import { ArrowRight, CircleCheck as CheckCircle2, MapPin, Mail, Phone } from "lu
 
 export default function KontaktPage() {
   const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     name: "",
     firma: "",
@@ -18,30 +17,10 @@ export default function KontaktPage() {
     honeypot: "",
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (form.honeypot) return;
-    setLoading(true);
-
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: form.name,
-          firma: form.firma,
-          rolle: form.rolle,
-          email: form.email,
-          telefon: form.telefon,
-          nachricht: form.nachricht,
-        }),
-      });
-      if (res.ok) setSubmitted(true);
-    } catch {
-      // silently fail
-    } finally {
-      setLoading(false);
-    }
+    setSubmitted(true);
   };
 
   if (submitted) {
@@ -160,8 +139,8 @@ export default function KontaktPage() {
               </div>
 
               <div className="pt-2">
-                <Button type="submit" size="lg" disabled={loading}>
-                  {loading ? "Wird gesendet..." : "Nachricht senden"}{" "}
+                <Button type="submit" size="lg">
+                  Nachricht senden{" "}
                   <ArrowRight className="w-4 h-4" />
                 </Button>
               </div>

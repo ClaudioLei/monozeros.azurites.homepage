@@ -1,7 +1,7 @@
 "use client";
 
 import { useInView } from "@/lib/motion";
-import { Video as LucideIcon } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 interface FeatureCardProps {
   icon: LucideIcon;

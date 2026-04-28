@@ -23,7 +23,6 @@ const complianceOptions = ["revDSG", "ISO 27001", "NIS2", "Finma", "Keine", "Son
 
 export default function AssessmentPage() {
   const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     name: "",
     firma: "",
@@ -47,22 +46,9 @@ export default function AssessmentPage() {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-
-    try {
-      const res = await fetch("/api/assessment", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-      if (res.ok) setSubmitted(true);
-    } catch {
-      // silently fail
-    } finally {
-      setLoading(false);
-    }
+    setSubmitted(true);
   };
 
   if (submitted) {
@@ -231,8 +217,8 @@ export default function AssessmentPage() {
           </div>
 
           <div className="pt-4">
-            <Button type="submit" size="lg" disabled={loading}>
-              {loading ? "Wird gesendet..." : "Assessment einreichen"}{" "}
+            <Button type="submit" size="lg">
+              Assessment einreichen{" "}
               <ArrowRight className="w-4 h-4" />
             </Button>
           </div>

@@ -29,7 +29,8 @@ export function Hero() {
 
           {/* Subheadline */}
           <p className="mt-6 text-lg leading-relaxed text-muted-foreground sm:text-xl max-w-2xl mx-auto text-pretty">
-            Monozeros verbindet moderne OpenXDR Technologie mit Schweizer Expertenservice, schneller Incident Response und professionellen Security Operations.
+            Monozeros ist offizieller Schweizer Reseller und Servicepartner für moderne OpenXDR-Technologie. 
+            Wir kombinieren internationale Plattformstärke mit lokalem Onboarding, Beratung und professioneller MDR-Begleitung.
           </p>
 
           {/* CTAs */}
@@ -51,11 +52,11 @@ export function Hero() {
           <div className="mt-16 flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Shield className="h-5 w-5 text-primary" />
-              <span>Swiss Hosted</span>
+              <span>Schweizer Ansprechpartner</span>
             </div>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Lock className="h-5 w-5 text-primary" />
-              <span>Azure Switzerland</span>
+              <span>Flexible Hostingmodelle</span>
             </div>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Eye className="h-5 w-5 text-primary" />
@@ -63,7 +64,7 @@ export function Hero() {
             </div>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Zap className="h-5 w-5 text-primary" />
-              <span>Enterprise Prozesse</span>
+              <span>Deutschsprachig</span>
             </div>
           </div>
         </div>
@@ -74,7 +75,7 @@ export function Hero() {
             { value: "< 15 Min", label: "Mean Time to Respond" },
             { value: "24/7", label: "Deutschsprachiger Support" },
             { value: "99.9%", label: "Service Verfügbarkeit" },
-            { value: "100%", label: "Schweizer Datenhaltung" },
+            { value: "100+", label: "Integrationen verfügbar" },
           ].map((stat) => (
             <div key={stat.label} className="text-center">
               <div className="text-3xl font-bold text-primary lg:text-4xl">{stat.value}</div>

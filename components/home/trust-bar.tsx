@@ -3,13 +3,13 @@ import { Shield, Cloud, Eye, MessageSquare, Building2 } from "lucide-react"
 const trustItems = [
   {
     icon: Shield,
-    label: "Swiss Hosted",
-    description: "Daten bleiben in der Schweiz"
+    label: "Schweizer Ansprechpartner",
+    description: "Lokales Onboarding & Support"
   },
   {
     icon: Cloud,
-    label: "Azure Switzerland",
-    description: "Enterprise Cloud Infrastruktur"
+    label: "Flexible Hostingmodelle",
+    description: "Standard oder Schweiz"
   },
   {
     icon: Eye,
@@ -19,12 +19,12 @@ const trustItems = [
   {
     icon: MessageSquare,
     label: "Deutschsprachig",
-    description: "Lokaler Ansprechpartner"
+    description: "Beratung & Eskalation"
   },
   {
     icon: Building2,
-    label: "Enterprise Prozesse",
-    description: "Dokumentierte Abläufe"
+    label: "Enterprise-ready",
+    description: "Dokumentierte Prozesse"
   },
 ]
 

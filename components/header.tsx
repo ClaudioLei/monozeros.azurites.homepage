@@ -14,8 +14,8 @@ import {
 const navigation = [
   { name: "Home", href: "/" },
   { name: "MDR & Managed XDR", href: "/mdr" },
-  { name: "Compliance & Trust", href: "/compliance" },
-  { name: "Für MSPs", href: "/msp" },
+  { name: "Hosting & Compliance", href: "/hosting" },
+  { name: "Für Partner", href: "/partner" },
   { name: "Technologie", href: "/technologie" },
   { name: "Assessment", href: "/assessment" },
   { name: "Insights", href: "/insights" },

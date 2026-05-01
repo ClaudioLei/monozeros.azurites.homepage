@@ -4,8 +4,8 @@ import { Shield, MapPin, Mail, Phone } from "lucide-react"
 const footerLinks = {
   services: [
     { name: "MDR & Managed XDR", href: "/mdr" },
-    { name: "Compliance & Trust", href: "/compliance" },
-    { name: "Für MSPs", href: "/msp" },
+    { name: "Hosting & Compliance", href: "/hosting" },
+    { name: "Für Partner", href: "/partner" },
     { name: "Technologie", href: "/technologie" },
   ],
   company: [

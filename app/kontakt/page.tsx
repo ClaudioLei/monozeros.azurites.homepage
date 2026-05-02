@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { Checkbox } from "@/components/ui/checkbox"
 
 const contactInfo = [
   {
@@ -41,6 +42,8 @@ const contactInfo = [
 
 export default function KontaktPage() {
   const [submitted, setSubmitted] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [errors, setErrors] = useState<Record<string, string>>({})
   const [formData, setFormData] = useState({
     name: "",
     company: "",
@@ -48,12 +51,58 @@ export default function KontaktPage() {
     email: "",
     phone: "",
     message: "",
+    assessmentRequest: false,
   })
+  const [honeypot, setHoneypot] = useState("")
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    setSubmitted(true)
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {}
+    
+    if (!formData.name) newErrors.name = "Name ist erforderlich"
+    if (!formData.company) newErrors.company = "Firma ist erforderlich"
+    if (!formData.email) {
+      newErrors.email = "Email ist erforderlich"
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "Ungültige E-Mail-Adresse"
+    }
+    if (!formData.message) newErrors.message = "Nachricht ist erforderlich"
+    
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
   }
+
+   const handleSubmit = async (e: React.FormEvent) => {
+     e.preventDefault()
+     
+     // Honeypot check
+     if (honeypot) {
+       return
+     }
+     
+     if (!validateForm()) return
+     
+     setIsSubmitting(true)
+     
+     try {
+       const response = await fetch('/api/contact', {
+         method: 'POST',
+         headers: { 'Content-Type': 'application/json' },
+         body: JSON.stringify(formData)
+       })
+       
+       const result = await response.json()
+       
+       if (result.success) {
+         setSubmitted(true)
+       } else {
+         setErrors({ submit: result.error || 'Senden fehlgeschlagen. Bitte versuchen Sie es erneut.' })
+       }
+     } catch {
+       setErrors({ submit: 'Verbindungsfehler. Bitte versuchen Sie es erneut.' })
+     } finally {
+       setIsSubmitting(false)
+     }
+   }
 
   if (submitted) {
     return (
@@ -82,7 +131,6 @@ export default function KontaktPage() {
     <main className="min-h-screen">
       <Header />
       
-      {/* Hero */}
       <section className="relative pt-32 pb-16 lg:pt-40 lg:pb-24">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,oklch(0.28_0.01_250/0.3)_1px,transparent_1px),linear-gradient(to_bottom,oklch(0.28_0.01_250/0.3)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-primary/10 blur-[120px]" />
@@ -102,11 +150,9 @@ export default function KontaktPage() {
         </div>
       </section>
 
-      {/* Contact Form & Info */}
       <section className="py-16 lg:py-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16">
-            {/* Contact Info */}
             <div>
               <h2 className="text-xl font-semibold text-foreground mb-6">
                 Kontaktinformationen
@@ -144,12 +190,22 @@ export default function KontaktPage() {
               </div>
             </div>
 
-            {/* Contact Form */}
             <div className="lg:col-span-2">
               <form onSubmit={handleSubmit} className="rounded-2xl border border-border/60 bg-card p-8 lg:p-10">
                 <h2 className="text-xl font-semibold text-foreground mb-6">
                   Nachricht senden
                 </h2>
+                
+                {/* Honeypot field - hidden from users */}
+                <div className="hidden">
+                  <input 
+                    type="text" 
+                    value={honeypot}
+                    onChange={(e) => setHoneypot(e.target.value)}
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
+                </div>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
@@ -160,8 +216,9 @@ export default function KontaktPage() {
                       placeholder="Max Muster"
                       value={formData.name}
                       onChange={(e) => setFormData({...formData, name: e.target.value})}
-                      className="mt-2 bg-input border-border"
+                      className={errors.name ? "border-destructive" : "bg-input border-border"}
                     />
+                    {errors.name && <p className="text-xs text-destructive mt-1">{errors.name}</p>}
                   </div>
                   <div>
                     <Label htmlFor="company" className="text-foreground">Firma *</Label>
@@ -171,8 +228,9 @@ export default function KontaktPage() {
                       placeholder="Muster AG"
                       value={formData.company}
                       onChange={(e) => setFormData({...formData, company: e.target.value})}
-                      className="mt-2 bg-input border-border"
+                      className={errors.company ? "border-destructive" : "bg-input border-border"}
                     />
+                    {errors.company && <p className="text-xs text-destructive mt-1">{errors.company}</p>}
                   </div>
                   <div>
                     <Label htmlFor="role" className="text-foreground">Rolle</Label>
@@ -181,7 +239,7 @@ export default function KontaktPage() {
                       placeholder="CTO, IT-Leiter, etc."
                       value={formData.role}
                       onChange={(e) => setFormData({...formData, role: e.target.value})}
-                      className="mt-2 bg-input border-border"
+                      className="bg-input border-border"
                     />
                   </div>
                   <div>
@@ -193,8 +251,9 @@ export default function KontaktPage() {
                       placeholder="max.muster@firma.ch"
                       value={formData.email}
                       onChange={(e) => setFormData({...formData, email: e.target.value})}
-                      className="mt-2 bg-input border-border"
+                      className={errors.email ? "border-destructive" : "bg-input border-border"}
                     />
+                    {errors.email && <p className="text-xs text-destructive mt-1">{errors.email}</p>}
                   </div>
                   <div className="sm:col-span-2">
                     <Label htmlFor="phone" className="text-foreground">Telefon</Label>
@@ -204,7 +263,7 @@ export default function KontaktPage() {
                       placeholder="+41 44 123 45 67"
                       value={formData.phone}
                       onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                      className="mt-2 bg-input border-border"
+                      className="bg-input border-border"
                     />
                   </div>
                   <div className="sm:col-span-2">
@@ -216,10 +275,31 @@ export default function KontaktPage() {
                       rows={5}
                       value={formData.message}
                       onChange={(e) => setFormData({...formData, message: e.target.value})}
-                      className="mt-2 bg-input border-border resize-none"
+                      className={errors.message ? "border-destructive" : "bg-input border-border resize-none"}
                     />
+                    {errors.message && <p className="text-xs text-destructive mt-1">{errors.message}</p>}
                   </div>
                 </div>
+
+                <div className="mt-6">
+                  <label className="flex items-start gap-3 cursor-pointer">
+                    <Checkbox
+                      id="assessmentRequest"
+                      checked={formData.assessmentRequest}
+                      onCheckedChange={(checked) => setFormData({...formData, assessmentRequest: !!checked})}
+                      className="mt-0.5"
+                    />
+                    <Label htmlFor="assessmentRequest" className="text-sm text-foreground cursor-pointer">
+                      Ich möchte einen Zugangslink zum MDR Sizing Assessment erhalten.
+                    </Label>
+                  </label>
+                </div>
+
+                {errors.submit && (
+                  <div className="mt-4 p-3 rounded-lg bg-destructive/10 text-destructive text-sm">
+                    {errors.submit}
+                  </div>
+                )}
 
                 <p className="mt-6 text-sm text-muted-foreground">
                   Mit dem Absenden stimmen Sie zu, dass wir Ihre Daten zur Bearbeitung Ihrer Anfrage verwenden dürfen.
@@ -229,10 +309,17 @@ export default function KontaktPage() {
                   <Button 
                     type="submit" 
                     size="lg" 
+                    disabled={isSubmitting}
                     className="bg-primary text-primary-foreground hover:bg-primary/90 gap-2"
                   >
-                    <Send className="h-4 w-4" />
-                    Nachricht senden
+                    {isSubmitting ? (
+                      <>Wird gesendet...</>
+                    ) : (
+                      <>
+                        <Send className="h-4 w-4" />
+                        Nachricht senden
+                      </>
+                    )}
                   </Button>
                 </div>
               </form>

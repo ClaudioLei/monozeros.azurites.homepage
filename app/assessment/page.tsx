@@ -1,13 +1,15 @@
 "use client"
 
 import { useState } from "react"
+import type { FormEvent } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { 
-  Users, Server, Cloud, Shield, Clock, Building2, 
+  Users, Cloud, Shield, Clock, Building2, 
   ArrowRight, ArrowLeft, Check, FileText
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
@@ -84,20 +86,94 @@ export default function AssessmentPage() {
     company: "",
     email: "",
     phone: "",
+    privacyAccepted: false,
+    website: "",
   })
   const [submitted, setSubmitted] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState("")
 
   const handleNext = () => {
-    if (currentStep < 4) setCurrentStep(currentStep + 1)
+    if (currentStep < 4) {
+      setCurrentStep(currentStep + 1)
+    }
   }
 
   const handleBack = () => {
-    if (currentStep > 1) setCurrentStep(currentStep - 1)
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1)
+    }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    setSubmitted(true)
+    setSubmitError("")
+
+    if (!formData.privacyAccepted) {
+      setSubmitError("Bitte akzeptieren Sie die Datenschutzhinweise.")
+      return
+    }
+
+    const message = [
+      "Public MDR Readiness Assessment",
+      "",
+      `Mitarbeitende: ${formData.employees || "-"}`,
+      `Branche: ${formData.industry || "-"}`,
+      `Endpoints: ${formData.endpoints || "-"}`,
+      `Server: ${formData.servers || "-"}`,
+      `Cloud Nutzung: ${formData.cloudUsage || "-"}`,
+      `Security Tools: ${formData.securityTools.length > 0 ? formData.securityTools.join(", ") : "-"}`,
+      `24/7 Ueberwachung benoetigt: ${formData.needs24x7 ? "Ja" : "Nein"}`,
+      `Compliance-Anforderungen: ${formData.complianceRequired ? "Ja" : "Nein"}`,
+    ].join("\n")
+
+    const payload: Record<string, unknown> = {
+      name: formData.name,
+      company: formData.company,
+      email: formData.email,
+      phone: formData.phone,
+      topic: "Public MDR Assessment",
+      message,
+      privacyAccepted: true,
+    }
+
+    if (formData.website) {
+      payload.website = formData.website
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      })
+
+      if (!response.ok) {
+        const result = await response.json().catch(() => null)
+        setSubmitError(result?.error?.message || result?.error || "Die Anfrage konnte nicht gesendet werden.")
+        return
+      }
+
+      const result = await response.json().catch(() => null)
+      if (result?.success === true && result?.mailSent === true) {
+        setSubmitted(true)
+        return
+      }
+
+      setSubmitError(
+        result?.mailSent === false
+          ? "Die Anfrage wurde erfasst, aber die E-Mail konnte nicht versendet werden. Bitte kontaktieren Sie uns direkt per E-Mail."
+          : "Die Anfrage konnte nicht bestätigt werden. Bitte versuchen Sie es erneut."
+      )
+    } catch {
+      setSubmitError("Verbindungsfehler. Bitte versuchen Sie es erneut.")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const toggleSecurityTool = (tool: string) => {
@@ -204,6 +280,18 @@ export default function AssessmentPage() {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="rounded-2xl border border-border/60 bg-card p-8">
+            <div className="absolute left-[-10000px] top-auto h-px w-px overflow-hidden">
+              <Label htmlFor="website">Website</Label>
+              <Input
+                id="website"
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                value={formData.website}
+                onChange={(e) => setFormData({...formData, website: e.target.value})}
+              />
+            </div>
+
             {/* Step 1: Company Size */}
             {currentStep === 1 && (
               <div className="space-y-6">
@@ -412,6 +500,23 @@ export default function AssessmentPage() {
                 <p className="text-sm text-muted-foreground">
                   Mit dem Absenden stimmen Sie zu, dass wir Sie bezüglich Ihrer Anfrage kontaktieren dürfen.
                 </p>
+                <div className="flex items-start gap-3 rounded-lg border border-border/60 bg-muted/30 p-4">
+                  <Checkbox
+                    id="privacyAccepted"
+                    checked={formData.privacyAccepted}
+                    onCheckedChange={(checked) => setFormData({...formData, privacyAccepted: !!checked})}
+                    className="mt-0.5"
+                  />
+                  <Label htmlFor="privacyAccepted" className="text-sm font-normal text-muted-foreground">
+                    Ich stimme zu, dass Monozeros meine Angaben zur Einschätzung der MDR-Anforderungen und zur Kontaktaufnahme verwendet. Es werden keine Passwörter, API-Keys oder produktiven Zugangsdaten abgefragt.
+                  </Label>
+                </div>
+              </div>
+            )}
+
+            {submitError && (
+              <div className="mt-6 rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
+                {submitError}
               </div>
             )}
 
@@ -432,8 +537,8 @@ export default function AssessmentPage() {
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               ) : (
-                <Button type="submit" className="bg-primary text-primary-foreground hover:bg-primary/90 gap-2">
-                  Assessment absenden
+                <Button type="submit" disabled={isSubmitting} className="bg-primary text-primary-foreground hover:bg-primary/90 gap-2">
+                  {isSubmitting ? "Wird gesendet..." : "Assessment absenden"}
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               )}

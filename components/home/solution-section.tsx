@@ -67,12 +67,12 @@ export function SolutionSection() {
             </div>
 
             <div className="mt-10">
-              <Link href="/mdr">
-                <Button className="bg-primary text-primary-foreground hover:bg-primary/90 gap-2">
-                  Mehr über MDR erfahren
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-              </Link>
+<Link href="/mdr-managed-xdr">
+                 <Button className="bg-primary text-primary-foreground hover:bg-primary/90 gap-2">
+                   Mehr über MDR erfahren
+                   <ArrowRight className="h-4 w-4" />
+                 </Button>
+               </Link>
             </div>
           </div>
 

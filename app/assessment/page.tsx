@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { TurnstileWidget } from "@/components/turnstile-widget"
 
 const steps = [
   {
@@ -92,6 +93,9 @@ export default function AssessmentPage() {
   const [submitted, setSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState("")
+  const [turnstileToken, setTurnstileToken] = useState("")
+  const [turnstileError, setTurnstileError] = useState("")
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
 
   const handleNext = () => {
     if (currentStep < 4) {
@@ -111,6 +115,11 @@ export default function AssessmentPage() {
 
     if (!formData.privacyAccepted) {
       setSubmitError("Bitte akzeptieren Sie die Datenschutzhinweise.")
+      return
+    }
+
+    if (turnstileSiteKey && !turnstileToken) {
+      setTurnstileError("Bitte bestaetigen Sie die Sicherheitspruefung.")
       return
     }
 
@@ -135,6 +144,7 @@ export default function AssessmentPage() {
       topic: "Public MDR Assessment",
       message,
       privacyAccepted: true,
+      turnstileToken,
     }
 
     if (formData.website) {
@@ -154,6 +164,10 @@ export default function AssessmentPage() {
 
       if (!response.ok) {
         const result = await response.json().catch(() => null)
+        if (result?.error?.code === "TURNSTILE_FAILED") {
+          setTurnstileToken("")
+          setTurnstileError("Die Sicherheitspruefung ist fehlgeschlagen oder abgelaufen. Bitte bestaetigen Sie sie erneut.")
+        }
         setSubmitError(result?.error?.message || result?.error || "Die Anfrage konnte nicht gesendet werden.")
         return
       }
@@ -511,6 +525,19 @@ export default function AssessmentPage() {
                     Ich stimme zu, dass Monozeros meine Angaben zur Einschätzung der MDR-Anforderungen und zur Kontaktaufnahme verwendet. Es werden keine Passwörter, API-Keys oder produktiven Zugangsdaten abgefragt.
                   </Label>
                 </div>
+                <TurnstileWidget
+                  action="publicAssessment"
+                  siteKey={turnstileSiteKey}
+                  error={turnstileError}
+                  onToken={(challengeToken) => {
+                    setTurnstileToken(challengeToken)
+                    setTurnstileError("")
+                  }}
+                  onReset={(message) => {
+                    setTurnstileToken("")
+                    setTurnstileError(message)
+                  }}
+                />
               </div>
             )}
 

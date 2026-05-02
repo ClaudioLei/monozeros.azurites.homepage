@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
+import { TurnstileWidget } from "@/components/turnstile-widget"
 
 const contactInfo = [
   {
@@ -44,6 +45,7 @@ export default function KontaktPage() {
   const [submitted, setSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [turnstileToken, setTurnstileToken] = useState("")
   const [formData, setFormData] = useState({
     name: "",
     company: "",
@@ -54,6 +56,7 @@ export default function KontaktPage() {
     assessmentRequest: false,
   })
   const [honeypot, setHoneypot] = useState("")
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {}
@@ -66,6 +69,9 @@ export default function KontaktPage() {
       newErrors.email = "Ungültige E-Mail-Adresse"
     }
     if (!formData.message) newErrors.message = "Nachricht ist erforderlich"
+    if (turnstileSiteKey && !turnstileToken) {
+      newErrors.turnstile = "Bitte bestaetigen Sie die Sicherheitspruefung"
+    }
     
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -87,7 +93,10 @@ export default function KontaktPage() {
        const response = await fetch('/api/contact', {
          method: 'POST',
          headers: { 'Content-Type': 'application/json' },
-         body: JSON.stringify(formData)
+         body: JSON.stringify({
+           ...formData,
+           turnstileToken,
+         })
        })
        
        const result = await response.json()
@@ -95,7 +104,16 @@ export default function KontaktPage() {
        if (result.success) {
          setSubmitted(true)
        } else {
-         setErrors({ submit: result.error || 'Senden fehlgeschlagen. Bitte versuchen Sie es erneut.' })
+         const apiError = result.error
+         if (apiError?.code === "TURNSTILE_FAILED") {
+           setTurnstileToken("")
+           setErrors({
+             turnstile: "Die Sicherheitspruefung ist fehlgeschlagen oder abgelaufen. Bitte bestaetigen Sie sie erneut.",
+             submit: apiError.message || "Sicherheitspruefung fehlgeschlagen.",
+           })
+         } else {
+           setErrors({ submit: apiError?.message || result.error || 'Senden fehlgeschlagen. Bitte versuchen Sie es erneut.' })
+         }
        }
      } catch {
        setErrors({ submit: 'Verbindungsfehler. Bitte versuchen Sie es erneut.' })
@@ -304,6 +322,20 @@ export default function KontaktPage() {
                 <p className="mt-6 text-sm text-muted-foreground">
                   Mit dem Absenden stimmen Sie zu, dass wir Ihre Daten zur Bearbeitung Ihrer Anfrage verwenden dürfen.
                 </p>
+
+                <TurnstileWidget
+                  action="contact"
+                  siteKey={turnstileSiteKey}
+                  error={errors.turnstile}
+                  onToken={(token) => {
+                    setTurnstileToken(token)
+                    setErrors(({ turnstile, ...rest }) => rest)
+                  }}
+                  onReset={(message) => {
+                    setTurnstileToken("")
+                    setErrors((currentErrors) => ({ ...currentErrors, turnstile: message }))
+                  }}
+                />
 
                 <div className="mt-6">
                   <Button 

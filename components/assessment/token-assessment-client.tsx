@@ -25,6 +25,11 @@ import { ArrowLeft, ArrowRight } from "lucide-react"
 declare global {
   interface Window {
     onAssessmentTurnstileSuccess?: TurnstileSuccessHandler
+    onAssessmentTurnstileExpired?: () => void
+    onAssessmentTurnstileError?: () => void
+    turnstile?: {
+      reset: () => void
+    }
   }
 }
 
@@ -72,10 +77,32 @@ export function TokenAssessmentClient({ token, company }: TokenAssessmentClientP
   useEffect(() => {
     window.onAssessmentTurnstileSuccess = (challengeToken: string) => {
       setTurnstileToken(challengeToken)
+      setErrors((currentErrors) => {
+        const { turnstile, ...rest } = currentErrors
+        return rest
+      })
+    }
+
+    window.onAssessmentTurnstileExpired = () => {
+      setTurnstileToken("")
+      setErrors((currentErrors) => ({
+        ...currentErrors,
+        turnstile: "Die Sicherheitspruefung ist abgelaufen. Bitte bestaetigen Sie sie erneut.",
+      }))
+    }
+
+    window.onAssessmentTurnstileError = () => {
+      setTurnstileToken("")
+      setErrors((currentErrors) => ({
+        ...currentErrors,
+        turnstile: "Die Sicherheitspruefung konnte nicht geladen werden. Bitte versuchen Sie es erneut.",
+      }))
     }
 
     return () => {
       delete window.onAssessmentTurnstileSuccess
+      delete window.onAssessmentTurnstileExpired
+      delete window.onAssessmentTurnstileError
     }
   }, [])
 
@@ -172,6 +199,13 @@ export function TokenAssessmentClient({ token, company }: TokenAssessmentClientP
         router.push('/expired-link')
       } else if (result.code === 'INVALID_TOKEN') {
         router.push('/invalid-link')
+      } else if (result.code === 'TURNSTILE_FAILED') {
+        setTurnstileToken("")
+        window.turnstile?.reset()
+        setErrors({
+          turnstile: "Die Sicherheitspruefung ist fehlgeschlagen oder abgelaufen. Bitte bestaetigen Sie sie erneut.",
+          submit: result.error || 'Sicherheitspruefung fehlgeschlagen',
+        })
       } else {
         setErrors({ submit: result.error || 'Ein Fehler ist aufgetreten' })
       }
@@ -343,6 +377,8 @@ export function TokenAssessmentClient({ token, company }: TokenAssessmentClientP
                   className="cf-turnstile"
                   data-sitekey={turnstileSiteKey}
                   data-callback="onAssessmentTurnstileSuccess"
+                  data-expired-callback="onAssessmentTurnstileExpired"
+                  data-error-callback="onAssessmentTurnstileError"
                 />
                 {errors.turnstile && (
                   <p className="mt-2 text-xs text-destructive">{errors.turnstile}</p>

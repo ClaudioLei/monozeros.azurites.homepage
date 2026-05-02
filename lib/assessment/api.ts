@@ -54,10 +54,11 @@ export async function submitAssessment(data: unknown): Promise<{
 
     if (!response.ok) {
       const errorResult = await response.json().catch(() => null)
+      const apiError = errorResult?.error
       return {
         success: false,
-        error: errorResult?.message || errorResult?.error || 'Submission failed',
-        code: errorResult?.code,
+        error: apiError?.message || errorResult?.message || errorResult?.error || 'Submission failed',
+        code: apiError?.code || errorResult?.code,
       }
     }
 

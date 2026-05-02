@@ -1,0 +1,14 @@
+node_modules
+.next
+.git
+.gitignore
+.dockerignore
+Dockerfile
+README.md
+pnpm-lock.yaml
+package-lock.json
+build
+dist
+out
+.env*
+*.log

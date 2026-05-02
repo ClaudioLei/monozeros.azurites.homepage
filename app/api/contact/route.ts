@@ -45,7 +45,8 @@ export async function POST(request: NextRequest) {
         { status: response.status }
       )
     }
-    return response.json()
+    const result = await response.json()
+    return NextResponse.json(result, { status: response.status })
   } catch (error) {
     console.error('Contact submission error:', error)
     return NextResponse.json(

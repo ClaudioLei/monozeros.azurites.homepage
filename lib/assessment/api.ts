@@ -1,6 +1,6 @@
 export async function validateToken(token: string): Promise<{
   valid: boolean
-  status: 'active' | 'expired' | 'used' | 'invalid'
+  status: 'active' | 'expired' | 'submitted' | 'revoked' | 'invalid'
   company?: string
 }> {
   try {
@@ -12,6 +12,12 @@ export async function validateToken(token: string): Promise<{
     })
 
     if (!response.ok) {
+      if (response.status === 410) {
+        return { valid: false, status: 'expired' }
+      }
+      if (response.status === 409) {
+        return { valid: false, status: 'submitted' }
+      }
       return { valid: false, status: 'invalid' }
     }
 
@@ -30,6 +36,7 @@ export async function validateToken(token: string): Promise<{
 export async function submitAssessment(data: unknown): Promise<{
   success: boolean
   error?: string
+  code?: string
 }> {
   try {
     const response = await fetch('/api/submit', {
@@ -41,7 +48,12 @@ export async function submitAssessment(data: unknown): Promise<{
     })
 
     if (!response.ok) {
-      return { success: false, error: 'Submission failed' }
+      const errorResult = await response.json().catch(() => null)
+      return {
+        success: false,
+        error: errorResult?.message || errorResult?.error || 'Submission failed',
+        code: errorResult?.code,
+      }
     }
 
     const result = await response.json()

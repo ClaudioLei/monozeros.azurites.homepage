@@ -33,16 +33,18 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify(data)
     })
     if (!response.ok) {
+      const errorResult = await response.json().catch(() => null)
       // If the backend returns an error, we forward it
       return NextResponse.json(
-        { 
-          success: false, 
-          error: `Backend error: ${response.statusText}` 
+        errorResult || {
+          success: false,
+          error: `Backend error: ${response.statusText}`
         },
         { status: response.status }
       )
     }
-    return response.json()
+    const result = await response.json()
+    return NextResponse.json(result, { status: response.status })
   } catch (error) {
     console.error('Submission error:', error)
     return NextResponse.json(

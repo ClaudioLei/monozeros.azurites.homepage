@@ -39,7 +39,7 @@ export interface AssessmentFormData {
 
 export interface TokenResponse {
   valid: boolean
-  status: 'active' | 'expired' | 'used' | 'invalid'
+  status: 'active' | 'expired' | 'submitted' | 'revoked' | 'invalid'
   company?: string
 }
 

@@ -1,114 +1,84 @@
 "use client"
 
+import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 import { XlsxAnswer } from "@/lib/assessment/types"
 
 interface StepEndpointsWorkloadsProps {
-  onAddAnswer: (answer: XlsxAnswer) => void
+  onAddAnswer: (_answer: XlsxAnswer) => void
   errors: Record<string, string>
 }
 
-export function StepEndpointsWorkloads({ onAddAnswer, errors }: StepEndpointsWorkloadsProps) {
+function cells(cell: string) {
+  return {
+    cellResponse: cell,
+    cellQuantity: cell.replace("C", "D"),
+    cellComment: cell.replace("C", "E"),
+  }
+}
+
+export function StepEndpointsWorkloads({ onAddAnswer }: StepEndpointsWorkloadsProps) {
+  const setAnswer = (cell: string, response: string, quantity = 0, comment = "") => {
+    onAddAnswer({ ...cells(cell), response, quantity, comment })
+  }
+
   return (
     <div className="space-y-6">
       <div>
         <h2 className="text-xl font-semibold text-foreground mb-1">Endpoints & Workloads</h2>
-        <p className="text-sm text-muted-foreground">Endgeräte und Server-Protection</p>
+        <p className="text-sm text-muted-foreground">Endpoint Protection, Server Protection und Mengen</p>
       </div>
 
-      <div className="space-y-4">
-        <div className="border border-border/40 rounded-lg p-4">
-          <Label className="mb-2 block font-medium">Workstations/Laptops</Label>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <Label htmlFor="ws-vendor" className="text-xs">Hersteller</Label>
-              <input
-                id="ws-vendor"
-                type="text"
-                placeholder="z.B. Microsoft Defender"
-                className="flex h-9 w-full rounded-md border border-border bg-input px-2 py-1 text-sm"
-                onBlur={(e) => {
-                  if (e.target.value) {
-                    onAddAnswer({
-                      cellResponse: "C3",
-                      cellQuantity: "D3",
-                      cellComment: "E3",
-                      response: e.target.value,
-                      quantity: 0,
-                      comment: ""
-                    })
-                  }
-                }}
-              />
-            </div>
-            <div>
-              <Label htmlFor="ws-count" className="text-xs">Anzahl</Label>
-              <input
-                id="ws-count"
-                type="number"
-                placeholder="0"
-                className="flex h-9 w-full rounded-md border border-border bg-input px-2 py-1 text-sm"
-                onBlur={(e) => {
-                  const count = parseInt(e.target.value) || 0
-                  onAddAnswer({
-                    cellResponse: "C3",
-                    cellQuantity: "D3",
-                    cellComment: "E3",
-                    response: "",
-                    quantity: count,
-                    comment: ""
-                  })
-                }}
-              />
-            </div>
-          </div>
+      <div className="grid gap-4">
+        <div>
+          <Label htmlFor="workstationProtection">Endpoint Protection fuer Workstations/Laptops/PCs</Label>
+          <Input
+            id="workstationProtection"
+            placeholder="Ja, Nein, Teilweise oder Nicht sicher"
+            onBlur={(event) => setAnswer("C2", event.target.value)}
+          />
         </div>
-
-        <div className="border border-border/40 rounded-lg p-4">
-          <Label className="mb-2 block font-medium">Server/Workloads</Label>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <Label htmlFor="srv-vendor" className="text-xs">Hersteller</Label>
-              <input
-                id="srv-vendor"
-                type="text"
-                placeholder="z.B. CrowdStrike"
-                className="flex h-9 w-full rounded-md border border-border bg-input px-2 py-1 text-sm"
-                onBlur={(e) => {
-                  if (e.target.value) {
-                    onAddAnswer({
-                      cellResponse: "C4",
-                      cellQuantity: "D4",
-                      cellComment: "E4",
-                      response: e.target.value,
-                      quantity: 0,
-                      comment: ""
-                    })
-                  }
-                }}
-              />
-            </div>
-            <div>
-              <Label htmlFor="srv-count" className="text-xs">Anzahl</Label>
-              <input
-                id="srv-count"
-                type="number"
-                placeholder="0"
-                className="flex h-9 w-full rounded-md border border-border bg-input px-2 py-1 text-sm"
-                onBlur={(e) => {
-                  const count = parseInt(e.target.value) || 0
-                  onAddAnswer({
-                    cellResponse: "C4",
-                    cellQuantity: "D4",
-                    cellComment: "E4",
-                    response: "",
-                    quantity: count,
-                    comment: ""
-                  })
-                }}
-              />
-            </div>
-          </div>
+        <div>
+          <Label htmlFor="workstationBrand">Technologie / Brand</Label>
+          <Input
+            id="workstationBrand"
+            placeholder="z.B. Microsoft Defender, CrowdStrike, SentinelOne"
+            onBlur={(event) => setAnswer("C3", event.target.value)}
+          />
+        </div>
+        <div>
+          <Label htmlFor="workstationLicense">Produktmodell oder Lizenz</Label>
+          <Input
+            id="workstationLicense"
+            placeholder="z.B. Defender for Endpoint P2, Complete, Nicht sicher"
+            onBlur={(event) => setAnswer("C4", event.target.value)}
+          />
+        </div>
+        <div>
+          <Label htmlFor="serverProtection">Endpoint Protection fuer Server/Workloads</Label>
+          <Input
+            id="serverProtection"
+            placeholder="Ja, Nein, Teilweise oder Nicht sicher"
+            onBlur={(event) => setAnswer("C5", event.target.value)}
+          />
+        </div>
+        <div>
+          <Label htmlFor="serverBrand">Server-Technologie / Brand und Produktmodell</Label>
+          <Input
+            id="serverBrand"
+            placeholder="z.B. Defender for Servers, CrowdStrike, EDR Agent"
+            onBlur={(event) => setAnswer("C6", event.target.value)}
+          />
+        </div>
+        <div>
+          <Label htmlFor="endpointCounts">Anzahl Workstations/Laptops/PCs und Server/Workloads</Label>
+          <Textarea
+            id="endpointCounts"
+            rows={3}
+            placeholder="z.B. 180 Workstations/Laptops, 25 Server/Workloads"
+            onBlur={(event) => setAnswer("C7", event.target.value)}
+          />
         </div>
       </div>
     </div>

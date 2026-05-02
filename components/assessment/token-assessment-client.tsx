@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import Script from "next/script"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -19,6 +20,12 @@ import { submitAssessment } from "@/lib/assessment/api"
 import { AssessmentFormData, XlsxAnswer } from "@/lib/assessment/types"
 import { ArrowLeft, ArrowRight } from "lucide-react"
 
+declare global {
+  interface Window {
+    onAssessmentTurnstileSuccess?: (_token: string) => void
+  }
+}
+
 interface TokenAssessmentClientProps {
   token: string
   company: string
@@ -29,6 +36,8 @@ export function TokenAssessmentClient({ token, company }: TokenAssessmentClientP
   const [currentStep, setCurrentStep] = useState(1)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [turnstileToken, setTurnstileToken] = useState("")
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
 
    const [formData, setFormData] = useState<AssessmentFormData>({
      contact: {
@@ -54,11 +63,30 @@ export function TokenAssessmentClient({ token, company }: TokenAssessmentClientP
      },
    })
 
+  useEffect(() => {
+    window.onAssessmentTurnstileSuccess = (challengeToken: string) => {
+      setTurnstileToken(challengeToken)
+    }
+
+    return () => {
+      delete window.onAssessmentTurnstileSuccess
+    }
+  }, [])
+
   const totalSteps = 10
   const progress = (currentStep / totalSteps) * 100
 
    const addXlsxAnswer = (answer: XlsxAnswer) => {
      setFormData(prev => {
+       if (!answer.response && !answer.quantity && !answer.comment) {
+         return {
+           ...prev,
+           xlsxAnswers: prev.xlsxAnswers.filter(
+             existing => existing.cellResponse !== answer.cellResponse
+           )
+         }
+       }
+
        // Check if an answer with the same cellResponse already exists
        const existingIndex = prev.xlsxAnswers.findIndex(
          existing => existing.cellResponse === answer.cellResponse
@@ -84,7 +112,9 @@ export function TokenAssessmentClient({ token, company }: TokenAssessmentClientP
 
   const handleNext = async () => {
     const isValid = validateCurrentStep()
-    if (!isValid) return
+    if (!isValid) {
+      return
+    }
     
     if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1)
@@ -99,19 +129,32 @@ export function TokenAssessmentClient({ token, company }: TokenAssessmentClientP
 
   const handleSubmit = async () => {
     const isValid = validateCurrentStep()
-    if (!isValid) return
+    if (!isValid) {
+      return
+    }
 
     setIsSubmitting(true)
     
     try {
       const payload = {
         ...formData,
+        companyProfile: {
+          ...formData.companyProfile,
+          countries: formData.companyProfile.countries
+            .split(',')
+            .map(country => country.trim())
+            .filter(Boolean),
+        },
         token,
+        turnstileToken,
+        website: "",
       }
       const result = await submitAssessment(payload)
       
       if (result.success) {
         router.push('/success')
+      } else if (result.code === 'ALREADY_SUBMITTED' || result.code === 'TOKEN_NOT_ACTIVE') {
+        router.push('/already-submitted')
       } else {
         setErrors({ submit: result.error || 'Ein Fehler ist aufgetreten' })
       }
@@ -126,22 +169,39 @@ export function TokenAssessmentClient({ token, company }: TokenAssessmentClientP
     const newErrors: Record<string, string> = {}
 
     if (currentStep === 1) {
-      if (!formData.contact.firstName) newErrors.firstName = "Vorname ist erforderlich"
-      if (!formData.contact.lastName) newErrors.lastName = "Nachname ist erforderlich"
-      if (!formData.contact.email) newErrors.email = "Email ist erforderlich"
+      if (!formData.contact.firstName) {
+        newErrors.firstName = "Vorname ist erforderlich"
+      }
+      if (!formData.contact.lastName) {
+        newErrors.lastName = "Nachname ist erforderlich"
+      }
+      if (!formData.contact.email) {
+        newErrors.email = "Email ist erforderlich"
+      }
       if (formData.contact.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.contact.email)) {
         newErrors.email = "Ungültige E-Mail-Adresse"
       }
-      if (!formData.contact.role) newErrors.role = "Rolle ist erforderlich"
+      if (!formData.contact.role) {
+        newErrors.role = "Rolle ist erforderlich"
+      }
     }
 
     if (currentStep === 2) {
-      if (!formData.companyProfile.industry) newErrors.industry = "Branche ist erforderlich"
-      if (!formData.companyProfile.employees) newErrors.employees = "Mitarbeiteranzahl ist erforderlich"
+      if (!formData.companyProfile.industry) {
+        newErrors.industry = "Branche ist erforderlich"
+      }
+      if (!formData.companyProfile.employees) {
+        newErrors.employees = "Mitarbeiteranzahl ist erforderlich"
+      }
     }
 
     if (currentStep === 10) {
-      if (!formData.final.privacyAccepted) newErrors.privacyAccepted = "Datenschutz muss akzeptiert werden"
+      if (!formData.final.privacyAccepted) {
+        newErrors.privacyAccepted = "Datenschutz muss akzeptiert werden"
+      }
+      if (turnstileSiteKey && !turnstileToken) {
+        newErrors.turnstile = "Bitte bestaetigen Sie die Sicherheitspruefung"
+      }
     }
 
     setErrors(newErrors)
@@ -247,6 +307,19 @@ export function TokenAssessmentClient({ token, company }: TokenAssessmentClientP
 
           <div className="mb-8">
             {renderStep()}
+            {currentStep === 10 && turnstileSiteKey && (
+              <div className="mt-6">
+                <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer />
+                <div
+                  className="cf-turnstile"
+                  data-sitekey={turnstileSiteKey}
+                  data-callback="onAssessmentTurnstileSuccess"
+                />
+                {errors.turnstile && (
+                  <p className="mt-2 text-xs text-destructive">{errors.turnstile}</p>
+                )}
+              </div>
+            )}
           </div>
 
           {errors.submit && (

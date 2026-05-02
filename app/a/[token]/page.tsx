@@ -21,7 +21,7 @@ export default async function TokenPage({ params }: TokenPageProps) {
 
   const validateToken = async (token: string): Promise<{
     valid: boolean
-    status: 'active' | 'expired' | 'used' | 'invalid'
+    status: 'active' | 'expired' | 'submitted' | 'revoked' | 'invalid'
     company?: string
   }> => {
     const backendUrl = process.env.BACKEND_URL
@@ -36,6 +36,20 @@ export default async function TokenPage({ params }: TokenPageProps) {
       })
 
       if (!response.ok) {
+        if (response.status === 410) {
+          return { valid: false, status: 'expired' }
+        }
+        try {
+          const errorResult = await response.json()
+          if (errorResult.status === 'submitted') {
+            return { valid: false, status: 'submitted' }
+          }
+          if (errorResult.status === 'revoked') {
+            return { valid: false, status: 'revoked' }
+          }
+        } catch {
+          // Fall through to invalid.
+        }
         return { valid: false, status: 'invalid' }
       }
 
@@ -45,7 +59,7 @@ export default async function TokenPage({ params }: TokenPageProps) {
     }
   }
 
-  let result: { valid: boolean; status: 'active' | 'expired' | 'used' | 'invalid'; company?: string }
+  let result: { valid: boolean; status: 'active' | 'expired' | 'submitted' | 'revoked' | 'invalid'; company?: string }
   try {
     result = await validateToken(token)
   } catch {
@@ -55,7 +69,7 @@ export default async function TokenPage({ params }: TokenPageProps) {
   if (!result.valid) {
     if (result.status === 'expired') {
       return redirect('/expired-link')
-    } else if (result.status === 'used') {
+    } else if (result.status === 'submitted') {
       return redirect('/already-submitted')
     } else {
       return redirect('/invalid-link')

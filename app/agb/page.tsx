@@ -13,11 +13,11 @@ export default function AgbPage() {
         <h1 className="text-4xl font-bold tracking-tight text-foreground">AGB</h1>
         <div className="mt-8 space-y-5 text-muted-foreground">
           <p>
-            Diese Seite ist als oeffentlich erreichbare Route fuer die allgemeinen
-            Geschaeftsbedingungen eingerichtet.
+            Diese Seite ist als öffentlich erreichbare Route für die allgemeinen
+            Geschäftsbedingungen eingerichtet.
           </p>
           <p>
-            Die finalen Vertragsbedingungen sollten vor der Veroeffentlichung mit den
+            Die finalen Vertragsbedingungen sollten vor der Veröffentlichung mit den
             verbindlichen Inhalten von Monozeros ersetzt werden.
           </p>
         </div>

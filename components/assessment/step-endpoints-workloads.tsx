@@ -32,7 +32,7 @@ export function StepEndpointsWorkloads({ onAddAnswer }: StepEndpointsWorkloadsPr
 
       <div className="grid gap-4">
         <div>
-          <Label htmlFor="workstationProtection">Endpoint Protection fuer Workstations/Laptops/PCs</Label>
+          <Label htmlFor="workstationProtection">Endpoint Protection für Workstations/Laptops/PCs</Label>
           <Input
             id="workstationProtection"
             placeholder="Ja, Nein, Teilweise oder Nicht sicher"
@@ -56,7 +56,7 @@ export function StepEndpointsWorkloads({ onAddAnswer }: StepEndpointsWorkloadsPr
           />
         </div>
         <div>
-          <Label htmlFor="serverProtection">Endpoint Protection fuer Server/Workloads</Label>
+          <Label htmlFor="serverProtection">Endpoint Protection für Server/Workloads</Label>
           <Input
             id="serverProtection"
             placeholder="Ja, Nein, Teilweise oder Nicht sicher"

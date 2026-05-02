@@ -13,11 +13,11 @@ export default function DatenschutzPage() {
         <h1 className="text-4xl font-bold tracking-tight text-foreground">Datenschutz</h1>
         <div className="mt-8 space-y-5 text-muted-foreground">
           <p>
-            Diese Seite ist als oeffentlich erreichbare Route fuer die Datenschutzhinweise
+            Diese Seite ist als öffentlich erreichbare Route für die Datenschutzhinweise
             eingerichtet.
           </p>
           <p>
-            Die finalen rechtlichen Inhalte sollten vor der Veroeffentlichung mit den
+            Die finalen rechtlichen Inhalte sollten vor der Veröffentlichung mit den
             verbindlichen Angaben von Monozeros ersetzt werden.
           </p>
         </div>

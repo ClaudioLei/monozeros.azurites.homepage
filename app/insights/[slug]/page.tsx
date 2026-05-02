@@ -27,11 +27,11 @@ const articles = [
     category: "Technologie",
     readTime: "5 Min",
     excerpt:
-      "Microsoft Defender liefert wertvolle Signale, braucht aber klare Prozesse fuer Triage, Eskalation und laufende Optimierung.",
+      "Microsoft Defender liefert wertvolle Signale, braucht aber klare Prozesse für Triage, Eskalation und laufende Optimierung.",
   },
   {
     slug: "incident-response-checkliste",
-    title: "Incident Response Checkliste fuer KMU",
+    title: "Incident Response Checkliste für KMU",
     category: "Best Practices",
     readTime: "7 Min",
     excerpt:
@@ -47,7 +47,7 @@ const articles = [
   },
   {
     slug: "cybersecurity-kmu-schweiz",
-    title: "Cybersecurity fuer KMU Schweiz: Der Einstieg",
+    title: "Cybersecurity für KMU Schweiz: Der Einstieg",
     category: "KMU",
     readTime: "9 Min",
     excerpt:
@@ -94,7 +94,7 @@ export default async function InsightArticlePage({ params }: InsightArticlePageP
           className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
         >
           <ArrowLeft className="h-4 w-4" />
-          Zurueck zu Insights
+          Zurück zu Insights
         </Link>
 
         <div className="mt-10">
@@ -114,12 +114,12 @@ export default async function InsightArticlePage({ params }: InsightArticlePageP
 
         <div className="mt-12 space-y-6 text-base leading-8 text-muted-foreground">
           <p>
-            Dieser Artikel ist als Platzhalter fuer die oeffentliche Route angelegt. Damit
+            Dieser Artikel ist als Platzhalter für die öffentliche Route angelegt. Damit
             verlinkte Insight-Seiten nicht mehr in einem 404 enden, kann der Inhalt hier
-            Schritt fuer Schritt mit finalen Fachartikeln ersetzt werden.
+            Schritt für Schritt mit finalen Fachartikeln ersetzt werden.
           </p>
           <p>
-            Fuer eine erste Einordnung der eigenen Umgebung ist das MDR Sizing Assessment
+            Für eine erste Einordnung der eigenen Umgebung ist das MDR Sizing Assessment
             der passendere Einstieg.
           </p>
         </div>

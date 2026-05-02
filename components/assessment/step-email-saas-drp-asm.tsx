@@ -130,7 +130,7 @@ export function StepEmailSaasDrpAsm({ onAddAnswer }: StepEmailSaasDrpAsmProps) {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <Label htmlFor="drp">Digital Risk Protection benoetigt?</Label>
+          <Label htmlFor="drp">Digital Risk Protection benötigt?</Label>
           <Input
             id="drp"
             placeholder="Ja, Nein oder Nicht sicher"
@@ -138,7 +138,7 @@ export function StepEmailSaasDrpAsm({ onAddAnswer }: StepEmailSaasDrpAsmProps) {
           />
         </div>
         <div>
-          <Label htmlFor="asm">Attack Surface Management benoetigt?</Label>
+          <Label htmlFor="asm">Attack Surface Management benötigt?</Label>
           <Input
             id="asm"
             placeholder="Ja, Nein oder Nicht sicher"

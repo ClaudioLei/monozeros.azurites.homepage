@@ -119,7 +119,7 @@ export default function AssessmentPage() {
     }
 
     if (turnstileSiteKey && !turnstileToken) {
-      setTurnstileError("Bitte bestaetigen Sie die Sicherheitspruefung.")
+      setTurnstileError("Bitte bestätigen Sie die Sicherheitsprüfung.")
       return
     }
 
@@ -132,7 +132,7 @@ export default function AssessmentPage() {
       `Server: ${formData.servers || "-"}`,
       `Cloud Nutzung: ${formData.cloudUsage || "-"}`,
       `Security Tools: ${formData.securityTools.length > 0 ? formData.securityTools.join(", ") : "-"}`,
-      `24/7 Ueberwachung benoetigt: ${formData.needs24x7 ? "Ja" : "Nein"}`,
+      `24/7 Überwachung benötigt: ${formData.needs24x7 ? "Ja" : "Nein"}`,
       `Compliance-Anforderungen: ${formData.complianceRequired ? "Ja" : "Nein"}`,
     ].join("\n")
 
@@ -166,7 +166,7 @@ export default function AssessmentPage() {
         const result = await response.json().catch(() => null)
         if (result?.error?.code === "TURNSTILE_FAILED") {
           setTurnstileToken("")
-          setTurnstileError("Die Sicherheitspruefung ist fehlgeschlagen oder abgelaufen. Bitte bestaetigen Sie sie erneut.")
+          setTurnstileError("Die Sicherheitsprüfung ist fehlgeschlagen oder abgelaufen. Bitte bestätigen Sie sie erneut.")
         }
         setSubmitError(result?.error?.message || result?.error || "Die Anfrage konnte nicht gesendet werden.")
         return

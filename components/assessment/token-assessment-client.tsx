@@ -87,7 +87,7 @@ export function TokenAssessmentClient({ token, company }: TokenAssessmentClientP
       setTurnstileToken("")
       setErrors((currentErrors) => ({
         ...currentErrors,
-        turnstile: "Die Sicherheitspruefung ist abgelaufen. Bitte bestaetigen Sie sie erneut.",
+        turnstile: "Die Sicherheitsprüfung ist abgelaufen. Bitte bestätigen Sie sie erneut.",
       }))
     }
 
@@ -95,7 +95,7 @@ export function TokenAssessmentClient({ token, company }: TokenAssessmentClientP
       setTurnstileToken("")
       setErrors((currentErrors) => ({
         ...currentErrors,
-        turnstile: "Die Sicherheitspruefung konnte nicht geladen werden. Bitte versuchen Sie es erneut.",
+        turnstile: "Die Sicherheitsprüfung konnte nicht geladen werden. Bitte versuchen Sie es erneut.",
       }))
     }
 
@@ -203,8 +203,8 @@ export function TokenAssessmentClient({ token, company }: TokenAssessmentClientP
         setTurnstileToken("")
         window.turnstile?.reset()
         setErrors({
-          turnstile: "Die Sicherheitspruefung ist fehlgeschlagen oder abgelaufen. Bitte bestaetigen Sie sie erneut.",
-          submit: result.error || 'Sicherheitspruefung fehlgeschlagen',
+          turnstile: "Die Sicherheitsprüfung ist fehlgeschlagen oder abgelaufen. Bitte bestätigen Sie sie erneut.",
+          submit: result.error || 'Sicherheitsprüfung fehlgeschlagen',
         })
       } else {
         setErrors({ submit: result.error || 'Ein Fehler ist aufgetreten' })
@@ -251,7 +251,7 @@ export function TokenAssessmentClient({ token, company }: TokenAssessmentClientP
         newErrors.privacyAccepted = "Datenschutz muss akzeptiert werden"
       }
       if (turnstileSiteKey && !turnstileToken) {
-        newErrors.turnstile = "Bitte bestaetigen Sie die Sicherheitspruefung"
+        newErrors.turnstile = "Bitte bestätigen Sie die Sicherheitsprüfung"
       }
     }
 

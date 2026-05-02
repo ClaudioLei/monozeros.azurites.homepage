@@ -80,7 +80,7 @@ export function StepSiemSoarMonitoring({ onAddAnswer }: StepSiemSoarMonitoringPr
           <Textarea
             id="coverageResponse"
             rows={3}
-            placeholder="z.B. 24/7 gewuenscht, kein internes SOC, IR vorhanden, Nachtbereitschaft unklar"
+            placeholder="z.B. 24/7 gewünscht, kein internes SOC, IR vorhanden, Nachtbereitschaft unklar"
             onBlur={(event) => setAnswer("C65", event.target.value)}
           />
         </div>

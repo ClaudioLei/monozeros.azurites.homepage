@@ -70,7 +70,7 @@ export default function KontaktPage() {
     }
     if (!formData.message) newErrors.message = "Nachricht ist erforderlich"
     if (turnstileSiteKey && !turnstileToken) {
-      newErrors.turnstile = "Bitte bestaetigen Sie die Sicherheitspruefung"
+      newErrors.turnstile = "Bitte bestätigen Sie die Sicherheitsprüfung"
     }
     
     setErrors(newErrors)
@@ -108,8 +108,8 @@ export default function KontaktPage() {
          if (apiError?.code === "TURNSTILE_FAILED") {
            setTurnstileToken("")
            setErrors({
-             turnstile: "Die Sicherheitspruefung ist fehlgeschlagen oder abgelaufen. Bitte bestaetigen Sie sie erneut.",
-             submit: apiError.message || "Sicherheitspruefung fehlgeschlagen.",
+             turnstile: "Die Sicherheitsprüfung ist fehlgeschlagen oder abgelaufen. Bitte bestätigen Sie sie erneut.",
+             submit: apiError.message || "Sicherheitsprüfung fehlgeschlagen.",
            })
          } else {
            setErrors({ submit: apiError?.message || result.error || 'Senden fehlgeschlagen. Bitte versuchen Sie es erneut.' })

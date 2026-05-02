@@ -40,10 +40,10 @@ export function TurnstileWidget({
       }
     }
     scopedWindow[expiredCallback] = () => {
-      onReset("Die Sicherheitspruefung ist abgelaufen. Bitte bestaetigen Sie sie erneut.")
+      onReset("Die Sicherheitsprüfung ist abgelaufen. Bitte bestätigen Sie sie erneut.")
     }
     scopedWindow[errorCallback] = () => {
-      onReset("Die Sicherheitspruefung konnte nicht geladen werden. Bitte versuchen Sie es erneut.")
+      onReset("Die Sicherheitsprüfung konnte nicht geladen werden. Bitte versuchen Sie es erneut.")
     }
 
     return () => {

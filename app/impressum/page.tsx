@@ -13,10 +13,10 @@ export default function ImpressumPage() {
         <h1 className="text-4xl font-bold tracking-tight text-foreground">Impressum</h1>
         <div className="mt-8 space-y-5 text-muted-foreground">
           <p>Monozeros GmbH</p>
-          <p>Zuerich, Schweiz</p>
+          <p>Zürich, Schweiz</p>
           <p>
-            Die finalen Impressumsangaben sollten vor der Veroeffentlichung mit Adresse,
-            Vertretungsberechtigten und Registerangaben ergaenzt werden.
+            Die finalen Impressumsangaben sollten vor der Veröffentlichung mit Adresse,
+            Vertretungsberechtigten und Registerangaben ergänzt werden.
           </p>
         </div>
       </section>

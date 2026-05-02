@@ -113,7 +113,7 @@ export function StepNetworkSecurity({ onAddAnswer }: StepNetworkSecurityProps) {
           />
         </div>
         <div>
-          <Label htmlFor="mdrTelemetry">Logs/Telemetry fuer MDR gewuenscht?</Label>
+          <Label htmlFor="mdrTelemetry">Logs/Telemetry für MDR gewünscht?</Label>
           <Input
             id="mdrTelemetry"
             placeholder="Ja, Nein oder Nicht sicher"

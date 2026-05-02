@@ -147,7 +147,6 @@ export function TokenAssessmentClient({ token, company }: TokenAssessmentClientP
         },
         token,
         turnstileToken,
-        website: "",
       }
       const result = await submitAssessment(payload)
       

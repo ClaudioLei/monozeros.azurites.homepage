@@ -126,6 +126,20 @@ export default function AssessmentPage() {
       `Compliance-Anforderungen: ${formData.complianceRequired ? "Ja" : "Nein"}`,
     ].join("\n")
 
+    const payload: Record<string, unknown> = {
+      name: formData.name,
+      company: formData.company,
+      email: formData.email,
+      phone: formData.phone,
+      topic: "Public MDR Assessment",
+      message,
+      privacyAccepted: true,
+    }
+
+    if (formData.website) {
+      payload.website = formData.website
+    }
+
     setIsSubmitting(true)
 
     try {
@@ -134,16 +148,7 @@ export default function AssessmentPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          name: formData.name,
-          company: formData.company,
-          email: formData.email,
-          phone: formData.phone,
-          topic: "Public MDR Assessment",
-          message,
-          privacyAccepted: true,
-          website: formData.website,
-        }),
+        body: JSON.stringify(payload),
       })
 
       if (!response.ok) {

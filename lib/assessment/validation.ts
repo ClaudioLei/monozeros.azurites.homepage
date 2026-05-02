@@ -23,7 +23,7 @@ export const xlsxAnswerSchema = z.object({
   cellQuantity: z.string(),
   cellComment: z.string(),
   response: z.string(),
-  quantity: z.number().optional(),
+  quantity: z.number().nullable().optional(),
   comment: z.string().optional(),
 })
 

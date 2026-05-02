@@ -21,7 +21,7 @@ export interface XlsxAnswer {
   cellQuantity: string
   cellComment: string
   response: string
-  quantity: number
+  quantity?: number | null
   comment: string
 }
 

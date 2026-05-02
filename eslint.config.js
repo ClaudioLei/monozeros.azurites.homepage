@@ -7,12 +7,14 @@ import tseslint from 'typescript-eslint';
 
 export default [
   {
-    files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
     ignores: [
-      'node_modules/',
+      'node_modules/**',
       '.next/**',
       'out/**',
     ],
+  },
+  {
+    files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
     languageOptions: {
       ecmaVersion: 2020,
       sourceType: 'module',
@@ -45,6 +47,8 @@ export default [
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      'no-unused-vars': 'off',
+      'no-undef': 'off',
 
       // React specific
       'react/react-in-jsx-scope': 'off',

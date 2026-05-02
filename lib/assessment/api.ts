@@ -37,6 +37,11 @@ export async function submitAssessment(data: unknown): Promise<{
   success: boolean
   error?: string
   code?: string
+  score?: {
+    score: number
+    category: string
+    complexity: string
+  }
 }> {
   try {
     const response = await fetch('/api/submit', {
@@ -57,7 +62,7 @@ export async function submitAssessment(data: unknown): Promise<{
     }
 
     const result = await response.json()
-    return { success: result.success, error: result.error }
+    return { success: result.success, error: result.error, score: result.score }
   } catch (error) {
     console.error('Submission error:', error)
     return { success: false, error: 'Network error' }

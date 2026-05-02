@@ -5,6 +5,8 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { Progress } from "@/components/ui/progress"
 import { StepContact } from "@/components/assessment/step-contact"
 import { StepCompanyProfile } from "@/components/assessment/step-company-profile"
@@ -22,9 +24,12 @@ import { ArrowLeft, ArrowRight } from "lucide-react"
 
 declare global {
   interface Window {
-    onAssessmentTurnstileSuccess?: (_token: string) => void
+    onAssessmentTurnstileSuccess?: TurnstileSuccessHandler
   }
 }
+
+type TurnstileSuccessHandler = (...args: [string]) => void
+
 
 interface TokenAssessmentClientProps {
   token: string
@@ -37,6 +42,7 @@ export function TokenAssessmentClient({ token, company }: TokenAssessmentClientP
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [turnstileToken, setTurnstileToken] = useState("")
+  const [website, setWebsite] = useState("")
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
 
    const [formData, setFormData] = useState<AssessmentFormData>({
@@ -147,13 +153,25 @@ export function TokenAssessmentClient({ token, company }: TokenAssessmentClientP
         },
         token,
         turnstileToken,
+        ...(website ? { website } : {}),
       }
       const result = await submitAssessment(payload)
       
       if (result.success) {
-        router.push('/success')
+        const params = new URLSearchParams()
+        if (result.score) {
+          params.set('score', String(result.score.score))
+          params.set('category', result.score.category)
+          params.set('complexity', result.score.complexity)
+        }
+
+        router.push(params.size > 0 ? `/success?${params.toString()}` : '/success')
       } else if (result.code === 'ALREADY_SUBMITTED' || result.code === 'TOKEN_NOT_ACTIVE') {
         router.push('/already-submitted')
+      } else if (result.code === 'EXPIRED_TOKEN') {
+        router.push('/expired-link')
+      } else if (result.code === 'INVALID_TOKEN') {
+        router.push('/invalid-link')
       } else {
         setErrors({ submit: result.error || 'Ein Fehler ist aufgetreten' })
       }
@@ -292,6 +310,18 @@ export function TokenAssessmentClient({ token, company }: TokenAssessmentClientP
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <Card className="w-full max-w-2xl bg-card border-border/40">
         <div className="p-6 lg:p-8">
+          <div className="absolute left-[-10000px] top-auto h-px w-px overflow-hidden">
+            <Label htmlFor="website">Website</Label>
+            <Input
+              id="website"
+              name="website"
+              tabIndex={-1}
+              autoComplete="off"
+              value={website}
+              onChange={(event) => setWebsite(event.target.value)}
+            />
+          </div>
+
           <div className="mb-8">
             <div className="flex items-center justify-between mb-2">
               <h1 className="text-lg font-semibold text-foreground">

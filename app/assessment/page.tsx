@@ -1,10 +1,11 @@
 "use client"
 
 import { useState } from "react"
+import type { FormEvent } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { 
-  Users, Server, Cloud, Shield, Clock, Building2, 
+  Users, Cloud, Shield, Clock, Building2, 
   ArrowRight, ArrowLeft, Check, FileText
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -104,7 +105,7 @@ export default function AssessmentPage() {
     }
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     setSubmitError("")
 
@@ -157,7 +158,17 @@ export default function AssessmentPage() {
         return
       }
 
-      setSubmitted(true)
+      const result = await response.json().catch(() => null)
+      if (result?.success === true && result?.mailSent === true) {
+        setSubmitted(true)
+        return
+      }
+
+      setSubmitError(
+        result?.mailSent === false
+          ? "Die Anfrage wurde erfasst, aber die E-Mail konnte nicht versendet werden. Bitte kontaktieren Sie uns direkt per E-Mail."
+          : "Die Anfrage konnte nicht bestätigt werden. Bitte versuchen Sie es erneut."
+      )
     } catch {
       setSubmitError("Verbindungsfehler. Bitte versuchen Sie es erneut.")
     } finally {
@@ -489,16 +500,17 @@ export default function AssessmentPage() {
                 <p className="text-sm text-muted-foreground">
                   Mit dem Absenden stimmen Sie zu, dass wir Sie bezüglich Ihrer Anfrage kontaktieren dürfen.
                 </p>
-                <label className="flex items-start gap-3 rounded-lg border border-border/60 bg-muted/30 p-4">
+                <div className="flex items-start gap-3 rounded-lg border border-border/60 bg-muted/30 p-4">
                   <Checkbox
+                    id="privacyAccepted"
                     checked={formData.privacyAccepted}
                     onCheckedChange={(checked) => setFormData({...formData, privacyAccepted: !!checked})}
                     className="mt-0.5"
                   />
-                  <span className="text-sm text-muted-foreground">
+                  <Label htmlFor="privacyAccepted" className="text-sm font-normal text-muted-foreground">
                     Ich stimme zu, dass Monozeros meine Angaben zur Einschätzung der MDR-Anforderungen und zur Kontaktaufnahme verwendet. Es werden keine Passwörter, API-Keys oder produktiven Zugangsdaten abgefragt.
-                  </span>
-                </label>
+                  </Label>
+                </div>
               </div>
             )}
 

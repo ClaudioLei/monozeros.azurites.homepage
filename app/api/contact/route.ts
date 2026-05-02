@@ -29,8 +29,9 @@ export async function POST(request: NextRequest) {
       )
     }
     
-    // In production, call your backend API:
-    const response = await fetch(`${backendUrl}/api/contact`, {
+    // Use external API URL via Caddy (HTTPS)
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://api.azurites.monozeros.ch'
+    const response = await fetch(`${apiUrl}/api/contact`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)

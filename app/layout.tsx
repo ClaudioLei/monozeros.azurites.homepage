@@ -1,4 +1,6 @@
 import type { Metadata } from 'next'
+import { headers } from 'next/headers'
+import { CspNonceProvider } from '@/components/csp-nonce-provider'
 import { ThemeProvider } from '@/components/theme-provider'
 import './globals.css'
 
@@ -15,22 +17,27 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const nonce = (await headers()).get('x-nonce')
+
   return (
     <html lang="de" suppressHydrationWarning className="bg-background">
       <body className="font-sans antialiased">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem={false}
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+        <CspNonceProvider nonce={nonce}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem={false}
+            disableTransitionOnChange
+            nonce={nonce ?? undefined}
+          >
+            {children}
+          </ThemeProvider>
+        </CspNonceProvider>
       </body>
     </html>
   )

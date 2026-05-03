@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import Script from "next/script"
+import { useCspNonce } from "@/components/csp-nonce-provider"
 
 type TurnstileApi = {
   render: (
@@ -48,6 +49,7 @@ export function TurnstileWidget({
   const onResetRef = useRef(onReset)
   const [scriptReady, setScriptReady] = useState(false)
   const activeSiteKey = siteKey || ""
+  const nonce = useCspNonce()
 
   useEffect(() => {
     onTokenRef.current = onToken
@@ -103,6 +105,7 @@ export function TurnstileWidget({
         src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
         async
         defer
+        nonce={nonce ?? undefined}
         onLoad={() => setScriptReady(true)}
         onReady={() => setScriptReady(true)}
         onError={() => {

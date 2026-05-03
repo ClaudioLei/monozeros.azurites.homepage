@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { TokenAssessmentClient } from '@/components/assessment/token-assessment-client'
 
@@ -19,44 +20,64 @@ interface TokenPageProps {
 export default async function TokenPage({ params }: TokenPageProps) {
   const { token } = await params
 
+  const getPublicBaseUrl = async () => {
+    const headerStore = await headers()
+    const host = headerStore.get('x-forwarded-host') || headerStore.get('host')
+
+    if (!host) {
+      return null
+    }
+
+    const protocol = headerStore.get('x-forwarded-proto') || 'https'
+    return `${protocol}://${host}`
+  }
+
   const validateToken = async (token: string): Promise<{
     valid: boolean
     status: 'active' | 'expired' | 'submitted' | 'revoked' | 'invalid'
     company?: string
   }> => {
     const backendUrl = process.env.BACKEND_URL
+    const publicBaseUrl = await getPublicBaseUrl()
+    const baseUrls = [backendUrl, publicBaseUrl].filter(
+      (url): url is string => Boolean(url)
+    )
 
-    if (!backendUrl) {
+    if (baseUrls.length === 0) {
       return { valid: false, status: 'invalid' }
     }
 
-    try {
-      const response = await fetch(`${backendUrl}/api/token/${encodeURIComponent(token)}`, {
-        cache: 'no-store',
-      })
+    for (const baseUrl of baseUrls) {
+      try {
+        const response = await fetch(`${baseUrl}/api/token/${encodeURIComponent(token)}`, {
+          cache: 'no-store',
+        })
 
-      if (!response.ok) {
-        if (response.status === 410) {
-          return { valid: false, status: 'expired' }
-        }
-        try {
-          const errorResult = await response.json()
-          if (errorResult.status === 'submitted') {
-            return { valid: false, status: 'submitted' }
+        if (!response.ok) {
+          if (response.status === 410) {
+            return { valid: false, status: 'expired' }
           }
-          if (errorResult.status === 'revoked') {
-            return { valid: false, status: 'revoked' }
+          try {
+            const errorResult = await response.json()
+            if (errorResult.status === 'submitted') {
+              return { valid: false, status: 'submitted' }
+            }
+            if (errorResult.status === 'revoked') {
+              return { valid: false, status: 'revoked' }
+            }
+          } catch {
+            // Fall through to invalid.
           }
-        } catch {
-          // Fall through to invalid.
+          return { valid: false, status: 'invalid' }
         }
-        return { valid: false, status: 'invalid' }
+
+        return response.json()
+      } catch {
+        // Try the public origin if the internal backend URL is unavailable.
       }
-
-      return response.json()
-    } catch {
-      return { valid: false, status: 'invalid' }
     }
+
+    return { valid: false, status: 'invalid' }
   }
 
   let result: { valid: boolean; status: 'active' | 'expired' | 'submitted' | 'revoked' | 'invalid'; company?: string }

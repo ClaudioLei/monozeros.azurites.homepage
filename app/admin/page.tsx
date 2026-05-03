@@ -7,6 +7,7 @@ import {
   Download,
   KeyRound,
   LogOut,
+  Mail,
   RefreshCcw,
   ShieldCheck,
   Trash2,
@@ -263,6 +264,33 @@ export default function AdminPage() {
     }
   }
 
+  const handleSendMail = async (token: ClosedAssessmentToken) => {
+    setIsSubmitting(true)
+    setMessage("")
+
+    try {
+      const response = await fetch(`/api/admin/tokens/${token.id}/send`, {
+        method: "POST",
+        headers: { "x-csrf-token": csrfToken },
+      })
+
+      if (!response.ok) {
+        throw new Error(await readError(response))
+      }
+
+      const result = (await response.json()) as { mailSent: boolean }
+      setMessage(
+        result.mailSent
+          ? `Assessment-Link wurde an ${token.contactEmail} gesendet.`
+          : "SMTP ist nicht konfiguriert; die E-Mail wurde nicht versendet.",
+      )
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "E-Mail konnte nicht versendet werden.")
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
     <main className="min-h-screen bg-background text-foreground">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
@@ -412,7 +440,7 @@ export default function AdminPage() {
                       <th className="px-4 py-3 font-medium">Erstellt</th>
                       <th className="px-4 py-3 font-medium">Ablauf</th>
                       <th className="px-4 py-3 font-medium">Submissions</th>
-                      <th className="px-4 py-3 text-right font-medium">Aktion</th>
+                      <th className="px-4 py-3 text-right font-medium">Aktionen</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -426,7 +454,18 @@ export default function AdminPage() {
                         <td className="px-4 py-3 text-muted-foreground">{formatDate(token.createdAt)}</td>
                         <td className="px-4 py-3 text-muted-foreground">{formatDate(token.expiresAt)}</td>
                         <td className="px-4 py-3">{token.submissionsCount}</td>
-                        <td className="px-4 py-3 text-right">
+                        <td className="px-4 py-3">
+                          <div className="flex justify-end gap-2">
+                            <Button
+                              type="button"
+                              size="sm"
+                              variant="outline"
+                              onClick={() => handleSendMail(token)}
+                              disabled={isSubmitting || token.status !== "active"}
+                            >
+                              <Mail className="h-4 w-4" />
+                              Mail
+                            </Button>
                           <Button
                             type="button"
                             size="sm"
@@ -437,6 +476,7 @@ export default function AdminPage() {
                             <Trash2 className="h-4 w-4" />
                             Widerrufen
                           </Button>
+                          </div>
                         </td>
                       </tr>
                     ))}

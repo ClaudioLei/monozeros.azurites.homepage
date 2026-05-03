@@ -30,7 +30,7 @@ const contactInfo = [
   {
     icon: MapPin,
     label: "Adresse",
-    value: "Zürich, Schweiz",
+    value: "Hirschenstrasse 18\n9200 Gossau",
     href: null
   },
   {

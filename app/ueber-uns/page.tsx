@@ -147,16 +147,16 @@ export default function AboutPage() {
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="rounded-2xl border border-border/60 bg-card p-8 lg:p-12">
-              <div className="flex items-center gap-2 text-primary mb-6">
-                <MapPin className="h-5 w-5" />
-                <span className="font-medium">Standort Schweiz</span>
-              </div>
-              <h3 className="text-2xl font-bold text-foreground">
-                Lokal verankert, international vernetzt
-              </h3>
-              <p className="mt-4 text-muted-foreground leading-relaxed">
-                Unser Hauptsitz ist in Zürich. Von hier aus betreuen wir Unternehmen in der gesamten Schweiz. Unsere Infrastruktur läuft in Schweizer Rechenzentren, unsere Analysten sprechen Deutsch.
-              </p>
+               <div className="flex items-center gap-2 text-primary mb-6">
+                 <MapPin className="h-5 w-5" />
+                 <span className="font-medium">Standort Schweiz</span>
+               </div>
+               <h3 className="text-2xl font-bold text-foreground">
+                 Lokal verankert, international vernetzt
+               </h3>
+               <p className="mt-4 text-muted-foreground leading-relaxed">
+                 Unser Hauptsitz ist in Gossau SG. Von hier aus betreuen wir Unternehmen in der gesamten Schweiz. Unsere Infrastruktur läuft in Schweizer Rechenzentren, unsere Analysten sprechen Deutsch.
+               </p>
               <div className="mt-8 flex items-center gap-6 text-sm">
                 <div className="flex items-center gap-2">
                   <Globe className="h-4 w-4 text-primary" />

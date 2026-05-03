@@ -39,23 +39,28 @@ export default async function TokenPage({ params }: TokenPageProps) {
   }> => {
     const backendUrl = process.env.BACKEND_URL
     const publicBaseUrl = await getPublicBaseUrl()
-    const baseUrls = [backendUrl, publicBaseUrl].filter(
-      (url): url is string => Boolean(url)
-    )
+    const candidates = [
+      backendUrl ? `${backendUrl}/api/token/${encodeURIComponent(token)}` : null,
+      publicBaseUrl ? `${publicBaseUrl}/internal-api/token/${encodeURIComponent(token)}` : null,
+      publicBaseUrl ? `${publicBaseUrl}/api/token/${encodeURIComponent(token)}` : null,
+    ].filter((url): url is string => Boolean(url))
 
-    if (baseUrls.length === 0) {
+    if (candidates.length === 0) {
       return { valid: false, status: 'invalid' }
     }
 
-    for (const baseUrl of baseUrls) {
+    for (const url of candidates) {
       try {
-        const response = await fetch(`${baseUrl}/api/token/${encodeURIComponent(token)}`, {
+        const response = await fetch(url, {
           cache: 'no-store',
         })
 
         if (!response.ok) {
           if (response.status === 410) {
             return { valid: false, status: 'expired' }
+          }
+          if (response.status === 401 || response.status >= 500) {
+            continue
           }
           try {
             const errorResult = await response.json()
@@ -73,7 +78,7 @@ export default async function TokenPage({ params }: TokenPageProps) {
 
         return response.json()
       } catch {
-        // Try the public origin if the internal backend URL is unavailable.
+        // Try the next candidate.
       }
     }
 

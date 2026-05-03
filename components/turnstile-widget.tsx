@@ -30,6 +30,11 @@ interface TurnstileWidgetProps {
   onReset: (message: string) => void
 }
 
+const TURNSTILE_LOAD_ERROR =
+  "Die Sicherheitsprüfung konnte nicht geladen werden. Bitte versuchen Sie es erneut."
+const TURNSTILE_EXPIRED_ERROR =
+  "Die Sicherheitsprüfung ist abgelaufen. Bitte bestätigen Sie sie erneut."
+
 export function TurnstileWidget({
   action,
   siteKey,
@@ -39,33 +44,18 @@ export function TurnstileWidget({
 }: TurnstileWidgetProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const widgetIdRef = useRef<string | null>(null)
+  const onTokenRef = useRef(onToken)
+  const onResetRef = useRef(onReset)
   const [scriptReady, setScriptReady] = useState(false)
-  const [runtimeSiteKey, setRuntimeSiteKey] = useState(siteKey || "")
-  const activeSiteKey = siteKey || runtimeSiteKey
+  const activeSiteKey = siteKey || ""
 
   useEffect(() => {
-    if (siteKey) {
-      setRuntimeSiteKey(siteKey)
-      return
-    }
+    onTokenRef.current = onToken
+  }, [onToken])
 
-    let cancelled = false
-
-    fetch("/turnstile-config", { cache: "no-store" })
-      .then((response) => (response.ok ? response.json() : null))
-      .then((config) => {
-        if (!cancelled && typeof config?.siteKey === "string") {
-          setRuntimeSiteKey(config.siteKey)
-        }
-      })
-      .catch(() => {
-        onReset("Die Sicherheitsprüfung konnte nicht geladen werden. Bitte versuchen Sie es erneut.")
-      })
-
-    return () => {
-      cancelled = true
-    }
-  }, [onReset, siteKey])
+  useEffect(() => {
+    onResetRef.current = onReset
+  }, [onReset])
 
   useEffect(() => {
     if (!activeSiteKey || !scriptReady || !containerRef.current) {
@@ -79,12 +69,14 @@ export function TurnstileWidget({
 
     widgetIdRef.current = turnstile.render(containerRef.current, {
       sitekey: activeSiteKey,
-      callback: onToken,
+      callback: (token) => {
+        onTokenRef.current(token)
+      },
       "expired-callback": () => {
-        onReset("Die Sicherheitsprüfung ist abgelaufen. Bitte bestätigen Sie sie erneut.")
+        onResetRef.current(TURNSTILE_EXPIRED_ERROR)
       },
       "error-callback": () => {
-        onReset("Die Sicherheitsprüfung konnte nicht geladen werden. Bitte versuchen Sie es erneut.")
+        onResetRef.current(TURNSTILE_LOAD_ERROR)
       },
     })
 
@@ -95,7 +87,7 @@ export function TurnstileWidget({
         widgetIdRef.current = null
       }
     }
-  }, [activeSiteKey, onReset, onToken, scriptReady])
+  }, [activeSiteKey, scriptReady])
 
   if (!activeSiteKey) {
     return (
@@ -112,8 +104,9 @@ export function TurnstileWidget({
         async
         defer
         onLoad={() => setScriptReady(true)}
+        onReady={() => setScriptReady(true)}
         onError={() => {
-          onReset("Die Sicherheitsprüfung konnte nicht geladen werden. Bitte versuchen Sie es erneut.")
+          onResetRef.current(TURNSTILE_LOAD_ERROR)
         }}
       />
       <div ref={containerRef} data-turnstile-action={action} />

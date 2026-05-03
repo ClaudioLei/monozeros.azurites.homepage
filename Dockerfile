@@ -8,8 +8,11 @@ RUN pnpm install --frozen-lockfile
 
 FROM base AS builder
 WORKDIR /app
+ARG NEXT_PUBLIC_TURNSTILE_SITE_KEY=""
+ENV NEXT_PUBLIC_TURNSTILE_SITE_KEY=$NEXT_PUBLIC_TURNSTILE_SITE_KEY
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+RUN if [ -z "$NEXT_PUBLIC_TURNSTILE_SITE_KEY" ]; then echo "NEXT_PUBLIC_TURNSTILE_SITE_KEY build arg is required"; exit 1; fi
 RUN pnpm run build
 
 FROM base AS runner

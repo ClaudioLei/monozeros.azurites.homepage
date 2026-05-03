@@ -41,6 +41,11 @@ jobs:
           tags: |
             type=ref,event=branch
 
+      - name: Validate Turnstile site key
+        env:
+          TURNSTILE_SITE_KEY: ${{ vars.NEXT_PUBLIC_TURNSTILE_SITE_KEY || secrets.NEXT_PUBLIC_TURNSTILE_SITE_KEY }}
+        run: test -n "$TURNSTILE_SITE_KEY"
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
@@ -48,5 +53,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            NEXT_PUBLIC_TURNSTILE_SITE_KEY=${{ vars.NEXT_PUBLIC_TURNSTILE_SITE_KEY || secrets.NEXT_PUBLIC_TURNSTILE_SITE_KEY }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

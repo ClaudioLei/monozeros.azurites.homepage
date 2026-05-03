@@ -1,13 +1,13 @@
 "use client"
 
-import Script from "next/script"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Progress } from "@/components/ui/progress"
+import { TurnstileWidget } from "@/components/turnstile-widget"
 import { StepContact } from "@/components/assessment/step-contact"
 import { StepCompanyProfile } from "@/components/assessment/step-company-profile"
 import { StepEndpointsWorkloads } from "@/components/assessment/step-endpoints-workloads"
@@ -21,20 +21,6 @@ import { StepFinal } from "@/components/assessment/step-final"
 import { submitAssessment } from "@/lib/assessment/api"
 import { AssessmentFormData, XlsxAnswer } from "@/lib/assessment/types"
 import { ArrowLeft, ArrowRight } from "lucide-react"
-
-declare global {
-  interface Window {
-    onAssessmentTurnstileSuccess?: TurnstileSuccessHandler
-    onAssessmentTurnstileExpired?: () => void
-    onAssessmentTurnstileError?: () => void
-    turnstile?: {
-      reset: () => void
-    }
-  }
-}
-
-type TurnstileSuccessHandler = (...args: [string]) => void
-
 
 interface TokenAssessmentClientProps {
   token: string
@@ -73,38 +59,6 @@ export function TokenAssessmentClient({ token, company }: TokenAssessmentClientP
        privacyAccepted: false,
      },
    })
-
-  useEffect(() => {
-    window.onAssessmentTurnstileSuccess = (challengeToken: string) => {
-      setTurnstileToken(challengeToken)
-      setErrors((currentErrors) => {
-        const { turnstile, ...rest } = currentErrors
-        return rest
-      })
-    }
-
-    window.onAssessmentTurnstileExpired = () => {
-      setTurnstileToken("")
-      setErrors((currentErrors) => ({
-        ...currentErrors,
-        turnstile: "Die Sicherheitsprüfung ist abgelaufen. Bitte bestätigen Sie sie erneut.",
-      }))
-    }
-
-    window.onAssessmentTurnstileError = () => {
-      setTurnstileToken("")
-      setErrors((currentErrors) => ({
-        ...currentErrors,
-        turnstile: "Die Sicherheitsprüfung konnte nicht geladen werden. Bitte versuchen Sie es erneut.",
-      }))
-    }
-
-    return () => {
-      delete window.onAssessmentTurnstileSuccess
-      delete window.onAssessmentTurnstileExpired
-      delete window.onAssessmentTurnstileError
-    }
-  }, [])
 
   const totalSteps = 10
   const progress = (currentStep / totalSteps) * 100
@@ -201,7 +155,6 @@ export function TokenAssessmentClient({ token, company }: TokenAssessmentClientP
         router.push('/invalid-link')
       } else if (result.code === 'TURNSTILE_FAILED') {
         setTurnstileToken("")
-        window.turnstile?.reset()
         setErrors({
           turnstile: "Die Sicherheitsprüfung ist fehlgeschlagen oder abgelaufen. Bitte bestätigen Sie sie erneut.",
           submit: result.error || 'Sicherheitsprüfung fehlgeschlagen',
@@ -250,7 +203,7 @@ export function TokenAssessmentClient({ token, company }: TokenAssessmentClientP
       if (!formData.final.privacyAccepted) {
         newErrors.privacyAccepted = "Datenschutz muss akzeptiert werden"
       }
-      if (turnstileSiteKey && !turnstileToken) {
+      if (!turnstileToken) {
         newErrors.turnstile = "Bitte bestätigen Sie die Sicherheitsprüfung"
       }
     }
@@ -370,20 +323,26 @@ export function TokenAssessmentClient({ token, company }: TokenAssessmentClientP
 
           <div className="mb-8">
             {renderStep()}
-            {currentStep === 10 && turnstileSiteKey && (
-              <div className="mt-6">
-                <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer />
-                <div
-                  className="cf-turnstile"
-                  data-sitekey={turnstileSiteKey}
-                  data-callback="onAssessmentTurnstileSuccess"
-                  data-expired-callback="onAssessmentTurnstileExpired"
-                  data-error-callback="onAssessmentTurnstileError"
-                />
-                {errors.turnstile && (
-                  <p className="mt-2 text-xs text-destructive">{errors.turnstile}</p>
-                )}
-              </div>
+            {currentStep === 10 && (
+              <TurnstileWidget
+                action="closedAssessment"
+                siteKey={turnstileSiteKey}
+                error={errors.turnstile}
+                onToken={(challengeToken) => {
+                  setTurnstileToken(challengeToken)
+                  setErrors((currentErrors) => {
+                    const { turnstile, ...rest } = currentErrors
+                    return rest
+                  })
+                }}
+                onReset={(message) => {
+                  setTurnstileToken("")
+                  setErrors((currentErrors) => ({
+                    ...currentErrors,
+                    turnstile: message,
+                  }))
+                }}
+              />
             )}
           </div>
 

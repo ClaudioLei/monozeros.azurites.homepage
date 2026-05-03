@@ -12,11 +12,34 @@ interface StepCloudProps {
   errors: Record<string, string>
 }
 
-const cloudOptions = [
-  { id: "aws", label: "AWS", cell: "C40" },
-  { id: "azure", label: "Azure", cell: "C41" },
-  { id: "gcp", label: "GCP", cell: "C42" },
+type CloudItem = {
+  id: string
+  label: string
+  cell: string
+  placeholder: string
+}
+
+type ItemState = {
+  checked: boolean
+  quantity: number
+  comment: string
+}
+
+const cloudProviders: CloudItem[] = [
+  { id: "azure", label: "Microsoft Azure", cell: "C40", placeholder: "Subscriptions, Tenants, Defender for Cloud" },
+  { id: "aws", label: "AWS", cell: "C41", placeholder: "Accounts, Organizations, GuardDuty, CloudTrail" },
+  { id: "gcp", label: "Google Cloud", cell: "C42", placeholder: "Projects, folders, Security Command Center" },
+  { id: "privateCloud", label: "Private Cloud / VMware", cell: "C43", placeholder: "vCenter, NSX, Hypervisor, Standorte" },
 ]
+
+const cloudSignals: CloudItem[] = [
+  { id: "activityLogs", label: "Activity / Audit Logs", cell: "C44", placeholder: "Quelle, Retention, Export-Ziel" },
+  { id: "cloudSecurity", label: "Cloud Security Posture", cell: "C45", placeholder: "Defender, Wiz, Prisma, Lacework" },
+  { id: "cloudWorkloadProtection", label: "Workload Protection", cell: "C46", placeholder: "Server, Container, Functions" },
+  { id: "cloudNetworkLogs", label: "Network Logs", cell: "C47", placeholder: "Flow Logs, Firewall Logs, WAF" },
+]
+
+const maturityOptions = ["Aktiv überwacht", "Logs vorhanden", "Teilweise", "Geplant", "Nicht sicher"]
 
 function cells(cell: string) {
   return {
@@ -27,87 +50,108 @@ function cells(cell: string) {
 }
 
 export function StepCloud({ onAddAnswer }: StepCloudProps) {
-  const [state, setState] = useState<Record<string, { checked: boolean; quantity: number; comment: string }>>({})
+  const [state, setState] = useState<Record<string, ItemState>>({})
+  const [maturity, setMaturity] = useState("")
 
-  const updateProvider = (cloud: typeof cloudOptions[number], patch: Partial<{ checked: boolean; quantity: number; comment: string }>) => {
-    const current = state[cloud.id] || { checked: false, quantity: 1, comment: "" }
+  const setAnswer = (cell: string, response: string, quantity = 0, comment = "") => {
+    onAddAnswer({ ...cells(cell), response, quantity, comment })
+  }
+
+  const updateItem = (item: CloudItem, patch: Partial<ItemState>) => {
+    const current = state[item.id] || { checked: false, quantity: 0, comment: "" }
     const next = { ...current, ...patch }
-    setState(prev => ({ ...prev, [cloud.id]: next }))
-    onAddAnswer({
-      ...cells(cloud.cell),
-      response: next.checked ? cloud.label : "",
-      quantity: next.checked ? next.quantity : 0,
-      comment: next.checked ? next.comment : "",
-    })
+    setState((prev) => ({ ...prev, [item.id]: next }))
+    setAnswer(item.cell, next.checked ? item.label : "", next.checked ? next.quantity : 0, next.checked ? next.comment : "")
   }
 
-  const setAnswer = (cell: string, response: string) => {
-    onAddAnswer({ ...cells(cell), response, quantity: 0, comment: "" })
+  const updateMaturity = (value: string) => {
+    setMaturity(value)
+    setAnswer("C48", value)
   }
+
+  const renderItems = (items: CloudItem[]) => (
+    <div className="space-y-3">
+      {items.map((item) => {
+        const current = state[item.id] || { checked: false, quantity: 0, comment: "" }
+        return (
+          <div key={item.id} className="rounded-lg border border-border p-3">
+            <label className="flex cursor-pointer items-center gap-2">
+              <Checkbox
+                id={item.id}
+                checked={current.checked}
+                onCheckedChange={(checked) => updateItem(item, { checked: !!checked })}
+              />
+              <span className="text-sm font-medium text-foreground">{item.label}</span>
+            </label>
+            {current.checked && (
+              <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-[140px_1fr]">
+                <Input
+                  type="number"
+                  min={0}
+                  inputMode="numeric"
+                  value={current.quantity || ""}
+                  onChange={(event) => updateItem(item, { quantity: Number(event.target.value) || 0 })}
+                  placeholder="Anzahl"
+                  aria-label={`${item.label} Anzahl`}
+                />
+                <Input
+                  value={current.comment}
+                  onChange={(event) => updateItem(item, { comment: event.target.value })}
+                  placeholder={item.placeholder}
+                />
+              </div>
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-semibold text-foreground mb-1">Cloud</h2>
-        <p className="text-sm text-muted-foreground">Cloud-Plattformen, Logging-Services und Cloud Security</p>
+        <h2 className="mb-1 text-xl font-semibold text-foreground">Cloud</h2>
+        <p className="text-sm text-muted-foreground">Provider, Security-Signale, Logquellen und Cloud-Reifegrad</p>
       </div>
 
       <div>
         <Label className="mb-3 block">Cloud-Provider</Label>
-        <div className="space-y-3">
-          {cloudOptions.map((cloud) => {
-            const current = state[cloud.id] || { checked: false, quantity: 1, comment: "" }
-            return (
-              <div key={cloud.id} className="rounded-lg border border-border p-3">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <Checkbox
-                    id={cloud.id}
-                    checked={current.checked}
-                    onCheckedChange={(checked) => updateProvider(cloud, { checked: !!checked })}
-                  />
-                  <span className="text-sm font-medium text-foreground">{cloud.label}</span>
-                </label>
-                {current.checked && (
-                  <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-[120px_1fr]">
-                    <Input
-                      type="number"
-                      min={0}
-                      value={current.quantity}
-                      onChange={(event) => updateProvider(cloud, { quantity: Number(event.target.value) || 0 })}
-                      aria-label={`${cloud.label} Menge`}
-                    />
-                    <Input
-                      value={current.comment}
-                      onChange={(event) => updateProvider(cloud, { comment: event.target.value })}
-                      placeholder="Accounts, Subscriptions, Projekte oder Kommentar"
-                    />
-                  </div>
-                )}
-              </div>
-            )
-          })}
+        {renderItems(cloudProviders)}
+      </div>
+
+      <div>
+        <Label className="mb-3 block">Cloud-Signale für MDR</Label>
+        {renderItems(cloudSignals)}
+      </div>
+
+      <div>
+        <Label className="mb-3 block">Cloud Monitoring Reifegrad</Label>
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
+          {maturityOptions.map((option) => (
+            <button
+              key={option}
+              type="button"
+              onClick={() => updateMaturity(option)}
+              className={`rounded-lg border p-2 text-sm transition-all ${
+                maturity === option
+                  ? "border-primary bg-primary/10 text-foreground"
+                  : "border-border text-muted-foreground hover:border-primary/50"
+              }`}
+            >
+              {option}
+            </button>
+          ))}
         </div>
       </div>
 
-      <div className="grid gap-4">
-        <div>
-          <Label htmlFor="cloudServices">Aktivierte Cloud- und Logging-Services</Label>
-          <Textarea
-            id="cloudServices"
-            rows={3}
-            placeholder="z.B. CloudTrail, GuardDuty, Azure Activity Logs, Defender for Cloud"
-            onBlur={(event) => setAnswer("C43", event.target.value)}
-          />
-        </div>
-        <div>
-          <Label htmlFor="cloudSecurityProducts">Third-Party Cloud Security Produkte</Label>
-          <Textarea
-            id="cloudSecurityProducts"
-            rows={3}
-            placeholder="z.B. Wiz, Prisma Cloud, Lacework oder Nicht sicher"
-            onBlur={(event) => setAnswer("C44", event.target.value)}
-          />
-        </div>
+      <div>
+        <Label htmlFor="cloudManual">Manuelle Cloud-Angaben</Label>
+        <Textarea
+          id="cloudManual"
+          rows={4}
+          placeholder="Log-Retention, SIEM-Export, kritische Subscriptions, Cloud-native Security, ungeklärte Bereiche"
+          onBlur={(event) => setAnswer("C49", event.target.value)}
+        />
       </div>
     </div>
   )

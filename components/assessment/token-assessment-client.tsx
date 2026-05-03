@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState, type ReactNode } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -20,7 +20,7 @@ import { StepCompliance } from "@/components/assessment/step-compliance"
 import { StepFinal } from "@/components/assessment/step-final"
 import { submitAssessment } from "@/lib/assessment/api"
 import { AssessmentFormData, XlsxAnswer } from "@/lib/assessment/types"
-import { ArrowLeft, ArrowRight } from "lucide-react"
+import { ArrowLeft, ArrowRight, Check } from "lucide-react"
 
 interface TokenAssessmentClientProps {
   token: string
@@ -34,6 +34,7 @@ export function TokenAssessmentClient({ token, company }: TokenAssessmentClientP
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [turnstileToken, setTurnstileToken] = useState("")
   const [website, setWebsite] = useState("")
+  const [draftLoaded, setDraftLoaded] = useState(false)
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
 
    const [formData, setFormData] = useState<AssessmentFormData>({
@@ -60,8 +61,68 @@ export function TokenAssessmentClient({ token, company }: TokenAssessmentClientP
      },
    })
 
-  const totalSteps = 10
+  const steps = [
+    "Kontakt",
+    "Profil",
+    "Endpoints",
+    "Network",
+    "Cloud",
+    "Identity",
+    "SIEM",
+    "SaaS",
+    "Compliance",
+    "Abschluss",
+  ]
+  const totalSteps = steps.length
   const progress = (currentStep / totalSteps) * 100
+  const draftKey = `closed-assessment-draft:${token}`
+
+  useEffect(() => {
+    const savedDraft = window.localStorage.getItem(draftKey)
+    if (!savedDraft) {
+      queueMicrotask(() => setDraftLoaded(true))
+      return
+    }
+
+    try {
+      const parsed = JSON.parse(savedDraft) as {
+        currentStep?: number
+        formData?: AssessmentFormData
+        website?: string
+      }
+
+      queueMicrotask(() => {
+        if (parsed.formData) {
+          setFormData(parsed.formData)
+        }
+        if (parsed.currentStep && parsed.currentStep >= 1 && parsed.currentStep <= totalSteps) {
+          setCurrentStep(parsed.currentStep)
+        }
+        if (parsed.website) {
+          setWebsite(parsed.website)
+        }
+      })
+    } catch {
+      window.localStorage.removeItem(draftKey)
+    } finally {
+      queueMicrotask(() => setDraftLoaded(true))
+    }
+  }, [draftKey, totalSteps])
+
+  useEffect(() => {
+    if (!draftLoaded) {
+      return
+    }
+
+    window.localStorage.setItem(
+      draftKey,
+      JSON.stringify({
+        currentStep,
+        formData,
+        website,
+      }),
+    )
+  }, [currentStep, draftKey, draftLoaded, formData, website])
 
    const addXlsxAnswer = (answer: XlsxAnswer) => {
      setFormData(prev => {
@@ -139,6 +200,7 @@ export function TokenAssessmentClient({ token, company }: TokenAssessmentClientP
       const result = await submitAssessment(payload)
       
       if (result.success) {
+        window.localStorage.removeItem(draftKey)
         const params = new URLSearchParams()
         if (result.score) {
           params.set('score', String(result.score.score))
@@ -212,86 +274,11 @@ export function TokenAssessmentClient({ token, company }: TokenAssessmentClientP
     return Object.keys(newErrors).length === 0
   }
 
-  const renderStep = () => {
-    switch (currentStep) {
-      case 1:
-        return (
-          <StepContact
-            data={formData.contact}
-            onChange={(contact) => setFormData({ ...formData, contact })}
-            errors={errors}
-          />
-        )
-      case 2:
-        return (
-          <StepCompanyProfile
-            data={formData.companyProfile}
-            onChange={(companyProfile) => setFormData({ ...formData, companyProfile })}
-            errors={errors}
-          />
-        )
-      case 3:
-        return (
-          <StepEndpointsWorkloads
-            onAddAnswer={addXlsxAnswer}
-            errors={errors}
-          />
-        )
-      case 4:
-        return (
-          <StepNetworkSecurity
-            onAddAnswer={addXlsxAnswer}
-            errors={errors}
-          />
-        )
-      case 5:
-        return (
-          <StepCloud
-            onAddAnswer={addXlsxAnswer}
-            errors={errors}
-          />
-        )
-      case 6:
-        return (
-          <StepIdentity
-            onAddAnswer={addXlsxAnswer}
-            errors={errors}
-          />
-        )
-      case 7:
-        return (
-          <StepSiemSoarMonitoring
-            onAddAnswer={addXlsxAnswer}
-            errors={errors}
-          />
-        )
-      case 8:
-        return (
-          <StepEmailSaasDrpAsm
-            onAddAnswer={addXlsxAnswer}
-            errors={errors}
-          />
-        )
-      case 9:
-        return (
-          <StepCompliance
-            data={formData.companyProfile}
-            onChange={(companyProfile) => setFormData({ ...formData, companyProfile })}
-            errors={errors}
-          />
-        )
-      case 10:
-        return (
-          <StepFinal
-            data={formData.final}
-            onChange={(final) => setFormData({ ...formData, final })}
-            errors={errors}
-          />
-        )
-      default:
-        return null
-    }
-  }
+  const showStep = (step: number, content: ReactNode) => (
+    <div key={step} hidden={currentStep !== step}>
+      {content}
+    </div>
+  )
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
@@ -319,10 +306,66 @@ export function TokenAssessmentClient({ token, company }: TokenAssessmentClientP
               </span>
             </div>
             <Progress value={progress} className="h-2" />
+            <div className="mt-4 grid grid-cols-5 gap-2 sm:grid-cols-10">
+              {steps.map((label, index) => {
+                const step = index + 1
+                return (
+                  <button
+                    key={label}
+                    type="button"
+                    onClick={() => setCurrentStep(step)}
+                    className={`flex h-9 items-center justify-center rounded-md border text-xs transition-all ${
+                      currentStep === step
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : step < currentStep
+                          ? "border-primary/50 bg-primary/10 text-foreground"
+                          : "border-border text-muted-foreground hover:border-primary/50"
+                    }`}
+                    title={label}
+                  >
+                    {step < currentStep ? <Check className="h-3.5 w-3.5" /> : step}
+                  </button>
+                )
+              })}
+            </div>
           </div>
 
           <div className="mb-8">
-            {renderStep()}
+            {showStep(1, (
+              <StepContact
+                data={formData.contact}
+                onChange={(contact) => setFormData({ ...formData, contact })}
+                errors={errors}
+              />
+            ))}
+            {showStep(2, (
+              <StepCompanyProfile
+                data={formData.companyProfile}
+                onChange={(companyProfile) => setFormData({ ...formData, companyProfile })}
+                errors={errors}
+              />
+            ))}
+            {showStep(3, <StepEndpointsWorkloads onAddAnswer={addXlsxAnswer} errors={errors} />)}
+            {showStep(4, <StepNetworkSecurity onAddAnswer={addXlsxAnswer} errors={errors} />)}
+            {showStep(5, <StepCloud onAddAnswer={addXlsxAnswer} errors={errors} />)}
+            {showStep(6, <StepIdentity onAddAnswer={addXlsxAnswer} errors={errors} />)}
+            {showStep(7, <StepSiemSoarMonitoring onAddAnswer={addXlsxAnswer} errors={errors} />)}
+            {showStep(8, <StepEmailSaasDrpAsm onAddAnswer={addXlsxAnswer} errors={errors} />)}
+            {showStep(9, (
+              <StepCompliance
+                data={formData.companyProfile}
+                onChange={(companyProfile) => setFormData({ ...formData, companyProfile })}
+                errors={errors}
+                onAddAnswer={addXlsxAnswer}
+              />
+            ))}
+            {showStep(10, (
+              <StepFinal
+                data={formData.final}
+                onChange={(final) => setFormData({ ...formData, final })}
+                errors={errors}
+              />
+            ))}
             {currentStep === 10 && (
               <TurnstileWidget
                 action="closedAssessment"
@@ -331,8 +374,9 @@ export function TokenAssessmentClient({ token, company }: TokenAssessmentClientP
                 onToken={(challengeToken) => {
                   setTurnstileToken(challengeToken)
                   setErrors((currentErrors) => {
-                    const { turnstile, ...rest } = currentErrors
-                    return rest
+                    const nextErrors = { ...currentErrors }
+                    delete nextErrors.turnstile
+                    return nextErrors
                   })
                 }}
                 onReset={(message) => {

@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 import { XlsxAnswer } from "@/lib/assessment/types"
 
 interface StepIdentityProps {
@@ -11,16 +12,31 @@ interface StepIdentityProps {
   errors: Record<string, string>
 }
 
-const identityOptions = [
-  { id: "entraId", label: "Entra ID", cell: "C50" },
-  { id: "okta", label: "Okta", cell: "C51" },
-  { id: "pingIdentity", label: "Ping Identity", cell: "C52" },
-  { id: "oneLogin", label: "OneLogin", cell: "C53" },
-  { id: "ciamPamIga", label: "CIAM / PAM / IGA", cell: "C54" },
-  { id: "cloudIam", label: "Cloud-Native IAM", cell: "C55" },
-  { id: "secrets", label: "Secrets & Machine Identity", cell: "C56" },
-  { id: "zeroTrust", label: "Zero Trust / ITDR", cell: "C57" },
+type IdentityItem = {
+  id: string
+  label: string
+  cell: string
+  placeholder: string
+}
+
+type ItemState = {
+  checked: boolean
+  quantity: number
+  comment: string
+}
+
+const identitySources: IdentityItem[] = [
+  { id: "entraId", label: "Microsoft Entra ID", cell: "C50", placeholder: "Tenant, User, P1/P2, Risk Logs" },
+  { id: "activeDirectory", label: "Active Directory", cell: "C51", placeholder: "Domains, DCs, Sites, Audit Logs" },
+  { id: "okta", label: "Okta", cell: "C52", placeholder: "Tenants, User, System Log" },
+  { id: "googleIdentity", label: "Google Identity", cell: "C53", placeholder: "Workspace, Cloud Identity, Audit Logs" },
+  { id: "pam", label: "PAM", cell: "C54", placeholder: "CyberArk, BeyondTrust, Delinea" },
+  { id: "iga", label: "IGA / Governance", cell: "C55", placeholder: "SailPoint, Saviynt, Rezertifizierung" },
+  { id: "machineIdentity", label: "Secrets / Machine Identity", cell: "C56", placeholder: "Vault, Key Vault, Zertifikate" },
+  { id: "zeroTrust", label: "Zero Trust / ITDR", cell: "C57", placeholder: "Conditional Access, ITDR, UEBA" },
 ]
+
+const controlOptions = ["MFA überall", "MFA teilweise", "Privileged Access geschützt", "Risk-based Access", "Nicht sicher"]
 
 function cells(cell: string) {
   return {
@@ -31,55 +47,66 @@ function cells(cell: string) {
 }
 
 export function StepIdentity({ onAddAnswer }: StepIdentityProps) {
-  const [state, setState] = useState<Record<string, { checked: boolean; quantity: number; comment: string }>>({})
+  const [state, setState] = useState<Record<string, ItemState>>({})
+  const [selectedControls, setSelectedControls] = useState<string[]>([])
 
-  const updateOption = (option: typeof identityOptions[number], patch: Partial<{ checked: boolean; quantity: number; comment: string }>) => {
-    const current = state[option.id] || { checked: false, quantity: 1, comment: "" }
+  const setAnswer = (cell: string, response: string, quantity = 0, comment = "") => {
+    onAddAnswer({ ...cells(cell), response, quantity, comment })
+  }
+
+  const updateItem = (item: IdentityItem, patch: Partial<ItemState>) => {
+    const current = state[item.id] || { checked: false, quantity: 0, comment: "" }
     const next = { ...current, ...patch }
-    setState(prev => ({ ...prev, [option.id]: next }))
-    onAddAnswer({
-      ...cells(option.cell),
-      response: next.checked ? option.label : "",
-      quantity: next.checked ? next.quantity : 0,
-      comment: next.checked ? next.comment : "",
-    })
+    setState((prev) => ({ ...prev, [item.id]: next }))
+    setAnswer(item.cell, next.checked ? item.label : "", next.checked ? next.quantity : 0, next.checked ? next.comment : "")
+  }
+
+  const toggleControl = (control: string) => {
+    const next = selectedControls.includes(control)
+      ? selectedControls.filter((item) => item !== control)
+      : [...selectedControls, control]
+
+    setSelectedControls(next)
+    setAnswer("C58", next.join(", "))
   }
 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-semibold text-foreground mb-1">Identity</h2>
-        <p className="text-sm text-muted-foreground">Identity Provider, PAM, IGA und Zero Trust Quellen</p>
+        <h2 className="mb-1 text-xl font-semibold text-foreground">Identity</h2>
+        <p className="text-sm text-muted-foreground">Identitätsquellen, privilegierte Zugriffe und relevante Audit-Signale</p>
       </div>
 
       <div>
         <Label className="mb-3 block">Identity-Quellen</Label>
         <div className="space-y-3">
-          {identityOptions.map((option) => {
-            const current = state[option.id] || { checked: false, quantity: 1, comment: "" }
+          {identitySources.map((item) => {
+            const current = state[item.id] || { checked: false, quantity: 0, comment: "" }
             return (
-              <div key={option.id} className="rounded-lg border border-border p-3">
-                <label className="flex items-center gap-2 cursor-pointer">
+              <div key={item.id} className="rounded-lg border border-border p-3">
+                <label className="flex cursor-pointer items-center gap-2">
                   <Checkbox
-                    id={option.id}
+                    id={item.id}
                     checked={current.checked}
-                    onCheckedChange={(checked) => updateOption(option, { checked: !!checked })}
+                    onCheckedChange={(checked) => updateItem(item, { checked: !!checked })}
                   />
-                  <span className="text-sm font-medium text-foreground">{option.label}</span>
+                  <span className="text-sm font-medium text-foreground">{item.label}</span>
                 </label>
                 {current.checked && (
-                  <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-[120px_1fr]">
+                  <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-[140px_1fr]">
                     <Input
                       type="number"
                       min={0}
-                      value={current.quantity}
-                      onChange={(event) => updateOption(option, { quantity: Number(event.target.value) || 0 })}
-                      aria-label={`${option.label} Menge`}
+                      inputMode="numeric"
+                      value={current.quantity || ""}
+                      onChange={(event) => updateItem(item, { quantity: Number(event.target.value) || 0 })}
+                      placeholder="Anzahl"
+                      aria-label={`${item.label} Anzahl`}
                     />
                     <Input
                       value={current.comment}
-                      onChange={(event) => updateOption(option, { comment: event.target.value })}
-                      placeholder="Tenant, Benutzeranzahl, Produkt oder Kommentar"
+                      onChange={(event) => updateItem(item, { comment: event.target.value })}
+                      placeholder={item.placeholder}
                     />
                   </div>
                 )}
@@ -87,6 +114,36 @@ export function StepIdentity({ onAddAnswer }: StepIdentityProps) {
             )
           })}
         </div>
+      </div>
+
+      <div>
+        <Label className="mb-3 block">Identity Controls</Label>
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+          {controlOptions.map((control) => (
+            <button
+              key={control}
+              type="button"
+              onClick={() => toggleControl(control)}
+              className={`rounded-lg border p-2 text-sm transition-all ${
+                selectedControls.includes(control)
+                  ? "border-primary bg-primary/10 text-foreground"
+                  : "border-border text-muted-foreground hover:border-primary/50"
+              }`}
+            >
+              {control}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <Label htmlFor="identityManual">Manuelle Identity-Angaben</Label>
+        <Textarea
+          id="identityManual"
+          rows={4}
+          placeholder="Break-glass Accounts, Admin-Anzahl, Service Accounts, externe Identitäten, Hybrid-Join, offene Risiken"
+          onBlur={(event) => setAnswer("C59", event.target.value)}
+        />
       </div>
     </div>
   )

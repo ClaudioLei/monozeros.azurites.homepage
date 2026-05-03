@@ -17,7 +17,7 @@ const monozeros = [
   { item: "Sofortige Entlastung", negative: false },
   { item: "Expertenteam inklusive", negative: false },
   { item: "24/7 ohne Zusatzaufwand", negative: false },
-  { item: "Ab CHF 3'500 monatlich", negative: false },
+  { item: "Ab CHF 18 monatlich/Device", negative: false },
 ]
 
 export function ROISection() {
@@ -65,7 +65,7 @@ export function ROISection() {
               </span>
             </div>
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-semibold text-foreground">Monozeros MDR</h3>
+              <h3 className="text-xl font-semibold text-foreground">MDR</h3>
               <span className="rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
                 Einfach
               </span>

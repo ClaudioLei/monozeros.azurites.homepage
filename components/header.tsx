@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Menu, X, Shield, ChevronDown } from "lucide-react"
+import { Menu, X, Shield, ChevronDown, Moon, Sun } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -10,6 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -63,8 +64,9 @@ export function Header() {
           </DropdownMenu>
         </div>
 
-        {/* CTA Button */}
+        {/* CTA Button + Theme Toggle */}
         <div className="hidden lg:flex lg:items-center lg:gap-4">
+          <ThemeToggle />
           <Link href="/kontakt">
             <Button variant="outline" size="sm" className="border-border text-foreground hover:bg-secondary">
               Kontakt
@@ -96,6 +98,10 @@ export function Header() {
       {mobileMenuOpen && (
         <div className="lg:hidden border-t border-border/40 bg-background">
           <div className="space-y-1 px-6 py-4">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium text-muted-foreground">Theme</span>
+              <ThemeToggle />
+            </div>
             {navigation.map((item) => (
               <Link
                 key={item.name}

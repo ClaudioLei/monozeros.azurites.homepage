@@ -69,7 +69,7 @@ export default function KontaktPage() {
       newErrors.email = "Ungültige E-Mail-Adresse"
     }
     if (!formData.message) newErrors.message = "Nachricht ist erforderlich"
-    if (turnstileSiteKey && !turnstileToken) {
+    if (!turnstileToken) {
       newErrors.turnstile = "Bitte bestätigen Sie die Sicherheitsprüfung"
     }
     

@@ -118,7 +118,7 @@ export default function AssessmentPage() {
       return
     }
 
-    if (turnstileSiteKey && !turnstileToken) {
+    if (!turnstileToken) {
       setTurnstileError("Bitte bestätigen Sie die Sicherheitsprüfung.")
       return
     }

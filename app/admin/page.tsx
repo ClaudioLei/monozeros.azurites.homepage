@@ -28,6 +28,7 @@ type ClosedAssessmentToken = {
   submittedAt?: string | null
   createdAt: string
   submissionsCount: number
+  canSendMail?: boolean
 }
 
 type AssessmentSubmission = {
@@ -461,7 +462,12 @@ export default function AdminPage() {
                               size="sm"
                               variant="outline"
                               onClick={() => handleSendMail(token)}
-                              disabled={isSubmitting || token.status !== "active"}
+                              disabled={isSubmitting || token.status !== "active" || !token.canSendMail}
+                              title={
+                                token.canSendMail
+                                  ? "Assessment-Link per Mail senden"
+                                  : "Für alte Links ist der Secret-Link nicht rekonstruierbar"
+                              }
                             >
                               <Mail className="h-4 w-4" />
                               Mail

@@ -1,36 +1,108 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# monozeros.azurites.homepage
 
-## Getting Started
+Production-ready Next.js frontend for Monozeros GmbH website with integrated MDR Assessment platform.
 
-First, run the development server:
+## Projektüberblick
+
+Dieses Repository enthält die Homepage von Monozeros GmbH inklusive:
+
+- Unternehmenswebsite (Home, Leistungen, Über uns, Kontakt)
+- Öffentliches MDR Readiness Assessment (`/assessment`)
+- Geschütztes MDR Sizing Assessment (`/a/[token]`)
+
+## Quick Start
+
+### 1. Installieren
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Umgebung einrichten
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Erstelle `.env.local`:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```env
+BACKEND_URL=http://localhost:3001
+NEXT_PUBLIC_TURNSTILE_SITE_KEY=1x00000000000000000000AA
+```
 
-## Learn More
+Für lokale Entwicklung ohne Turnstile können beide Werte weggelassen werden.
 
-To learn more about Next.js, take a look at the following resources:
+### 3. Entwicklungsserver starten
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+pnpm dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Die Homepage ist unter `http://localhost:3005` erreichbar.
 
-## Deploy on Vercel
+## Pages & Routen
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+/                    Home
+/mdr-managed-xdr     MDR & Managed XDR
+/hosting-compliance  Hosting & Compliance
+/partner             Für Partner
+/technologie         Technologie
+/assessment          Öffentliches MDR Readiness Assessment
+/insights            Insights
+/ueber-uns           Über uns
+/kontakt             Kontakt
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+/a/[token]           Geschützter MDR Sizing Wizard
+/success             Erfolgreich abgesendet
+/invalid-link        Ungültiger Link
+/expired-link        Link abgelaufen
+/already-submitted   Bereits verwendet
+```
+
+## API Integration
+
+Die Homepage leitet Requests an das Backend weiter:
+
+- `POST /api/contact` → Backend-Kontaktformular
+- `GET /api/token/[token]` → Token-Validierung
+- `POST /api/submit` → Assessment-Einreichung
+
+Setze `BACKEND_URL` auf die Backend-Instanz (Standard: `http://localhost:3001`).
+
+## Komponenten
+
+```
+/components
+  /layout
+    Header.tsx
+    Footer.tsx
+  /sections
+    Hero.tsx
+    TrustBar.tsx
+    ProblemSection.tsx
+    SolutionSection.tsx
+    RoiSection.tsx
+    CtaSection.tsx
+  /assessment
+    AssessmentLanding.tsx
+    AssessmentWizard.tsx
+    StepContact.tsx
+    StepCompanyProfile.tsx
+    StepEndpointsWorkloads.tsx
+    StepNetworkSecurity.tsx
+    StepCloud.tsx
+    StepIdentity.tsx
+    StepSiemSoarMonitoring.tsx
+    StepEmailSaasDrpAsm.tsx
+    StepCompliance.tsx
+    StepFinal.tsx
+    ProgressBar.tsx
+    TrustSidebar.tsx
+```
+
+## Build & Deployment
+
+```bash
+pnpm build
+pnpm start
+```
+
+Docker-Image wird automatisch gebaut via GitHub Actions. Das Tag kann über `HOMEPAGE_TAG` gesteuert werden.

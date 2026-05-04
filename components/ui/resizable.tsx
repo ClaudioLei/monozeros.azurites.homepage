@@ -2,16 +2,20 @@
 
 import * as React from 'react'
 import { GripVertical } from 'lucide-react'
-import { Group, Panel, Separator } from 'react-resizable-panels'
+import {
+  Panel,
+  PanelGroup,
+  PanelResizeHandle,
+} from 'react-resizable-panels'
 
 import { cn } from '@/lib/utils'
 
 function ResizablePanelGroup({
   className,
   ...props
-}: React.ComponentProps<typeof Group>) {
+}: React.ComponentProps<typeof PanelGroup>) {
   return (
-    <Group
+    <PanelGroup
       data-slot="resizable-panel-group"
       className={cn(
         'flex h-full w-full data-[orientation=vertical]:flex-col',
@@ -32,11 +36,11 @@ function ResizableHandle({
   withHandle,
   className,
   ...props
-}: React.ComponentProps<typeof Separator> & {
+}: React.ComponentProps<typeof PanelResizeHandle> & {
   withHandle?: boolean
 }) {
   return (
-    <Separator
+    <PanelResizeHandle
       data-slot="resizable-handle"
       className={cn(
         'bg-border focus-visible:ring-ring relative flex w-px items-center justify-center after:absolute after:inset-y-0 after:left-1/2 after:w-1 after:-translate-x-1/2 focus-visible:ring-1 focus-visible:ring-offset-1 focus-visible:outline-hidden data-[orientation=vertical]:h-px data-[orientation=vertical]:w-full data-[orientation=vertical]:after:left-0 data-[orientation=vertical]:after:h-1 data-[orientation=vertical]:after:w-full data-[orientation=vertical]:after:translate-x-0 data-[orientation=vertical]:after:-translate-y-1/2 [&[data-orientation=vertical]>div]:rotate-90',
@@ -49,7 +53,7 @@ function ResizableHandle({
           <GripVertical className="size-2.5" />
         </div>
       )}
-    </Separator>
+    </PanelResizeHandle>
   )
 }
 

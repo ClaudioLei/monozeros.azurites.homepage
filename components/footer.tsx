@@ -35,7 +35,7 @@ export function Footer() {
             </Link>
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
               Schweizer Cybersecurity mit operativer Realitaet. Managed
-              Detection & Response fuer Unternehmen ohne eigenes SOC.
+              Detection & Response für Unternehmen ohne eigenes SOC.
             </p>
             <div className="mt-6 space-y-3">
               <div className="flex items-center gap-3 text-sm text-muted-foreground">

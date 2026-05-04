@@ -8,6 +8,7 @@ function buildCsp(nonce: string, isDev: boolean) {
     "img-src 'self' blob: data:",
     "font-src 'self' data:",
     "connect-src 'self' https://challenges.cloudflare.com",
+    "media-src 'self' https://www.cynclair.com",
     "frame-src https://challenges.cloudflare.com",
     "object-src 'none'",
     "base-uri 'self'",

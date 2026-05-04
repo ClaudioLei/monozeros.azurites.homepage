@@ -213,7 +213,7 @@ export default function MDRPage() {
               </h2>
               <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
                 Sie brauchen professionelle Security, aber kein eigenes Security
-                Operations Center? Monozeros MDR ist die Lösung.
+                Operations Center? Azurites MDR ist die Lösung.
               </p>
               <ul className="mt-8 space-y-4">
                 {benefits.map((benefit) => (
@@ -235,11 +235,11 @@ export default function MDRPage() {
                 </span>
               </div>
               <h3 className="text-2xl font-bold text-foreground">
-                In 4 Wochen einsatzbereit
+                In wenigen Tagen einsatzbereit
               </h3>
               <p className="mt-4 text-muted-foreground">
                 Kein langwieriger Aufbau. Wir integrieren Ihre Systeme und
-                starten mit dem Monitoring innerhalb von 4 Wochen.
+                starten mit dem Monitoring in kurzer Zeit.
               </p>
               <div className="mt-8">
                 <Link href="/assessment">

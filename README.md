@@ -27,7 +27,7 @@ BACKEND_URL=http://localhost:3001
 NEXT_PUBLIC_TURNSTILE_SITE_KEY=1x00000000000000000000AA
 ```
 
-Fuer lokale Entwicklung ohne Turnstile koennen beide Werte weggelassen werden.
+für lokale Entwicklung ohne Turnstile koennen beide Werte weggelassen werden.
 
 ### 3. Entwicklungsserver starten
 
@@ -43,7 +43,7 @@ Die Homepage ist unter `http://localhost:3005` erreichbar.
 /                    Home
 /mdr-managed-xdr     MDR & Managed XDR
 /hosting-compliance  Hosting & Compliance
-/partner             Fuer Partner
+/partner             für Partner
 /technologie         Technologie
 /assessment          Oeffentliches MDR Readiness Assessment
 /insights            Insights

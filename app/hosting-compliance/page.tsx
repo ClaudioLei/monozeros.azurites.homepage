@@ -4,13 +4,13 @@ import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { 
-  Server, 
-  Globe, 
-  ShieldCheck, 
-  Lock, 
-  FileCheck, 
-  Users, 
+import {
+  Server,
+  Globe,
+  ShieldCheck,
+  Lock,
+  FileCheck,
+  Users,
   AlertTriangle,
   CheckCircle2,
   Zap,
@@ -22,13 +22,13 @@ export default function HostingPage() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       <main className="pt-24">
         {/* Hero Section */}
         <section className="relative overflow-hidden py-24 lg:py-32">
           <div className="absolute inset-0 bg-grid-white/[0.02]" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-3xl" />
-          
+
           <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
             <div className="mx-auto max-w-3xl text-center">
               <div className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-card px-4 py-1.5 text-sm text-muted-foreground mb-8">
@@ -39,7 +39,7 @@ export default function HostingPage() {
                 Hosting & Compliance
               </h1>
               <p className="mt-6 text-lg leading-relaxed text-muted-foreground max-w-2xl mx-auto text-pretty">
-                Flexible Betriebsmodelle für Budget, Sicherheit und Compliance. 
+                Flexible Betriebsmodelle für Budget, Sicherheit und Compliance.
                 Wählen Sie das Deployment, das zu Ihren Anforderungen passt.
               </p>
             </div>
@@ -70,9 +70,9 @@ export default function HostingPage() {
                     <span className="text-sm text-primary font-medium">Empfohlen für Mid-Market</span>
                   </div>
                 </div>
-                
+
                 <p className="text-muted-foreground mb-8">
-                  Gehostet auf AWS Singapore - die kosteneffiziente Lösung für schnellen Start 
+                  Gehostet auf AWS Singapore - die kosteneffiziente Lösung für schnellen Start
                   und professionellen Betrieb. Ideal für viele Mid-Market Unternehmen.
                 </p>
 
@@ -95,7 +95,7 @@ export default function HostingPage() {
                 <div className="flex items-center gap-4 pt-6 border-t border-border/40">
                   <Zap className="h-5 w-5 text-primary" />
                   <span className="text-sm text-muted-foreground">
-                    Go-live in wenigen Wochen möglich
+                    Go-live in wenigen Tagen möglich
                   </span>
                 </div>
               </div>
@@ -107,7 +107,7 @@ export default function HostingPage() {
                     Optional
                   </span>
                 </div>
-                
+
                 <div className="flex items-center gap-4 mb-6">
                   <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10">
                     <Building2 className="h-7 w-7 text-primary" />
@@ -117,9 +117,9 @@ export default function HostingPage() {
                     <span className="text-sm text-muted-foreground font-medium">Für erhöhte Anforderungen</span>
                   </div>
                 </div>
-                
+
                 <p className="text-muted-foreground mb-8">
-                  Dediziertes Hosting auf AWS Schweiz für Unternehmen mit erhöhten 
+                  Dediziertes Hosting auf AWS Schweiz für Unternehmen mit erhöhten
                   regulatorischen Anforderungen und sensiblen Workloads.
                 </p>
 
@@ -225,8 +225,8 @@ export default function HostingPage() {
                       Wichtiger Hinweis
                     </h3>
                     <p className="text-muted-foreground leading-relaxed">
-                      Monozeros bietet keine Rechtsberatung an. Die Compliance-Unterstützung erfolgt 
-                      ausschliesslich auf technischer und organisatorischer Ebene. Für rechtliche 
+                      Monozeros bietet keine Rechtsberatung an. Die Compliance-Unterstützung erfolgt
+                      ausschliesslich auf technischer und organisatorischer Ebene. Für rechtliche
                       Fragestellungen empfehlen wir die Konsultation entsprechender Fachpersonen.
                     </p>
                   </div>
@@ -241,13 +241,13 @@ export default function HostingPage() {
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary/10 via-card to-card border border-border/60 p-12 lg:p-16">
               <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-              
+
               <div className="relative mx-auto max-w-2xl text-center">
                 <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
                   Welches Modell passt zu Ihnen?
                 </h2>
                 <p className="mt-4 text-lg text-muted-foreground">
-                  Lassen Sie uns gemeinsam herausfinden, welches Deployment-Modell 
+                  Lassen Sie uns gemeinsam herausfinden, welches Deployment-Modell
                   optimal zu Ihren Anforderungen und Ihrem Budget passt.
                 </p>
                 <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">

@@ -1,10 +1,10 @@
 FROM node:22-alpine AS base
-RUN npm install -g pnpm
+RUN apk add --no-cache libc6-compat
 
 FROM base AS deps
 WORKDIR /app
-COPY package.json pnpm-lock.yaml .npmrc ./
-RUN pnpm install --frozen-lockfile
+COPY package.json package-lock.json ./
+RUN npm ci
 
 FROM base AS builder
 WORKDIR /app
@@ -13,15 +13,15 @@ ENV NEXT_PUBLIC_TURNSTILE_SITE_KEY=$NEXT_PUBLIC_TURNSTILE_SITE_KEY
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN if [ -z "$NEXT_PUBLIC_TURNSTILE_SITE_KEY" ]; then echo "NEXT_PUBLIC_TURNSTILE_SITE_KEY build arg is required"; exit 1; fi
-RUN pnpm run build
+RUN npm run build
 
 FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=3000
 
-COPY package.json pnpm-lock.yaml .npmrc ./
-RUN pnpm install --frozen-lockfile --prod
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev
 
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public

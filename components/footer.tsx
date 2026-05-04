@@ -1,15 +1,15 @@
 import Link from "next/link"
-import { Shield, MapPin, Mail, Phone } from "lucide-react"
+import { Mail, MapPin, Phone, Shield } from "lucide-react"
 
 const footerLinks = {
   services: [
     { name: "MDR & Managed XDR", href: "/mdr-managed-xdr" },
     { name: "Hosting & Compliance", href: "/hosting-compliance" },
-    { name: "Für Partner", href: "/partner" },
+    { name: "Fuer Partner", href: "/partner" },
     { name: "Technologie", href: "/technologie" },
   ],
   company: [
-    { name: "Über uns", href: "/ueber-uns" },
+    { name: "Ueber uns", href: "/ueber-uns" },
     { name: "Insights", href: "/insights" },
     { name: "Assessment", href: "/assessment" },
     { name: "Kontakt", href: "/kontakt" },
@@ -26,7 +26,6 @@ export function Footer() {
     <footer className="border-t border-border/40 bg-card">
       <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-4">
-          {/* Brand Column */}
           <div className="lg:col-span-1">
             <Link href="/" className="flex items-center gap-2">
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
@@ -37,7 +36,8 @@ export function Footer() {
               </span>
             </Link>
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-              Schweizer Cybersecurity mit operativer Realität. 24/7 Managed Detection & Response für Unternehmen ohne eigenes SOC.
+              Schweizer Cybersecurity mit operativer Realitaet. Managed
+              Detection & Response fuer Unternehmen ohne eigenes SOC.
             </p>
             <div className="mt-6 space-y-3">
               <div className="flex items-center gap-3 text-sm text-muted-foreground">
@@ -50,20 +50,25 @@ export function Footer() {
               </div>
               <div className="flex items-center gap-3 text-sm text-muted-foreground">
                 <Mail className="h-4 w-4 text-primary" />
-                <a href="mailto:info@monozeros.ch" className="hover:text-foreground transition-colors">
+                <a
+                  href="mailto:info@monozeros.ch"
+                  className="transition-colors hover:text-foreground"
+                >
                   info@monozeros.ch
                 </a>
               </div>
               <div className="flex items-center gap-3 text-sm text-muted-foreground">
                 <Phone className="h-4 w-4 text-primary" />
-                <a href="tel:+41443001234" className="hover:text-foreground transition-colors">
+                <a
+                  href="tel:+41443001234"
+                  className="transition-colors hover:text-foreground"
+                >
                   +41 44 300 12 34
                 </a>
               </div>
             </div>
           </div>
 
-          {/* Services */}
           <div>
             <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">
               Services
@@ -82,7 +87,6 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Company */}
           <div>
             <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">
               Unternehmen
@@ -101,7 +105,6 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Legal */}
           <div>
             <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground">
               Rechtliches
@@ -121,18 +124,11 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Bottom Bar */}
         <div className="mt-12 border-t border-border/40 pt-8">
-          <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+          <div className="flex items-center justify-center md:justify-start">
             <p className="text-sm text-muted-foreground">
               © {new Date().getFullYear()} Monozeros GmbH. Alle Rechte vorbehalten.
             </p>
-            <div className="flex items-center gap-6">
-              <span className="flex items-center gap-2 text-sm text-muted-foreground">
-                <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-                SOC Status: Operational
-              </span>
-            </div>
           </div>
         </div>
       </div>

@@ -15,12 +15,6 @@ export function Hero() {
 
       <div className="relative mx-auto max-w-7xl px-6 py-24 lg:px-8">
         <div className="mx-auto max-w-4xl text-center">
-          {/* Eyebrow */}
-          <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-border/60 bg-secondary/50 px-4 py-1.5 text-sm text-muted-foreground backdrop-blur-sm">
-            <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-            <span>24/7 Security Operations Center aktiv</span>
-          </div>
-
           {/* Main Headline */}
           <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl text-balance">
             24/7 Cybersecurity für Schweizer Unternehmen{" "}

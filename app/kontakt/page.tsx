@@ -7,6 +7,13 @@ import { Mail, Phone, MapPin, Clock, Check, Send } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { TurnstileWidget } from "@/components/turnstile-widget"
 
@@ -37,6 +44,19 @@ const contactInfo = [
   },
 ]
 
+const roleOptions = [
+  "CEO / Geschäftsleitung",
+  "CIO / IT-Leitung",
+  "CISO / Security-Leitung",
+  "CTO",
+  "IT-Administrator",
+  "Security Engineer / Analyst",
+  "System Engineer",
+  "Einkauf / Beschaffung",
+  "Projektleitung",
+  "Sonstige Rolle",
+]
+
 export default function KontaktPage() {
   const [submitted, setSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -61,6 +81,9 @@ export default function KontaktPage() {
     }
     if (!formData.company) {
       newErrors.company = "Firma ist erforderlich"
+    }
+    if (!formData.role) {
+      newErrors.role = "Rolle ist erforderlich"
     }
     if (!formData.email) {
       newErrors.email = "Email ist erforderlich"
@@ -303,21 +326,38 @@ export default function KontaktPage() {
                     )}
                   </div>
                   <div>
-                    <Label
-                      htmlFor="role"
-                      className="mb-2 block text-foreground"
-                    >
-                      Rolle
+                    <Label className="mb-2 block text-foreground">
+                      Rolle *
                     </Label>
-                    <Input
-                      id="role"
-                      placeholder="CTO, IT-Leiter, etc."
+                    <Select
                       value={formData.role}
-                      onChange={(e) =>
-                        setFormData({ ...formData, role: e.target.value })
+                      onValueChange={(value) =>
+                        setFormData({ ...formData, role: value })
                       }
-                      className="border-border bg-input"
-                    />
+                    >
+                      <SelectTrigger
+                        aria-invalid={!!errors.role}
+                        className={
+                          errors.role
+                            ? "w-full border-destructive"
+                            : "w-full border-border bg-input"
+                        }
+                      >
+                        <SelectValue placeholder="Bitte Rolle auswählen" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {roleOptions.map((role) => (
+                          <SelectItem key={role} value={role}>
+                            {role}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {errors.role && (
+                      <p className="mt-1 text-xs text-destructive">
+                        {errors.role}
+                      </p>
+                    )}
                   </div>
                   <div>
                     <Label

@@ -9,10 +9,10 @@ export function Hero() {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
       {/* Background Grid Pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,oklch(0.28_0.01_250/0.3)_1px,transparent_1px),linear-gradient(to_bottom,oklch(0.28_0.01_250/0.3)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
-      
+
       {/* Gradient Orb */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-primary/10 blur-[120px]" />
-      
+
       <div className="relative mx-auto max-w-7xl px-6 py-24 lg:px-8">
         <div className="mx-auto max-w-4xl text-center">
           {/* Eyebrow */}
@@ -29,7 +29,7 @@ export function Hero() {
 
           {/* Subheadline */}
           <p className="mt-6 text-lg leading-relaxed text-muted-foreground sm:text-xl max-w-2xl mx-auto text-pretty">
-            Monozeros ist offizieller Schweizer Reseller und Servicepartner für moderne OpenXDR-Technologie. 
+            Monozeros ist offizieller Schweizer Reseller und Servicepartner für moderne OpenXDR-Technologie.
             Wir kombinieren internationale Plattformstärke mit lokalem Onboarding, Beratung und professioneller MDR-Begleitung.
           </p>
 
@@ -73,7 +73,7 @@ export function Hero() {
         <div className="mt-24 grid grid-cols-2 gap-8 md:grid-cols-4">
           {[
             { value: "< 15 Min", label: "Mean Time to Respond" },
-            { value: "24/7", label: "Deutschsprachiger Support" },
+            { value: "24/7", label: "Englischsprachiger Support" },
             { value: "99.9%", label: "Service Verfügbarkeit" },
             { value: "100+", label: "Integrationen verfügbar" },
           ].map((stat) => (

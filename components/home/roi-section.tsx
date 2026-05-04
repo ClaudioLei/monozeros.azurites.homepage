@@ -17,7 +17,7 @@ const monozeros = [
   { item: "Sofortige Entlastung", negative: false },
   { item: "Expertenteam inklusive", negative: false },
   { item: "24/7 ohne Zusatzaufwand", negative: false },
-  { item: "Ab CHF 18 monatlich/Device", negative: false },
+  { item: "Auf Anfrage", negative: false },
 ]
 
 export function ROISection() {

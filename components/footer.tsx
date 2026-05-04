@@ -5,12 +5,10 @@ const footerLinks = {
   services: [
     { name: "MDR & Managed XDR", href: "/mdr-managed-xdr" },
     { name: "Hosting & Compliance", href: "/hosting-compliance" },
-    { name: "Fuer Partner", href: "/partner" },
     { name: "Technologie", href: "/technologie" },
   ],
   company: [
     { name: "Ueber uns", href: "/ueber-uns" },
-    { name: "Insights", href: "/insights" },
     { name: "Assessment", href: "/assessment" },
     { name: "Kontakt", href: "/kontakt" },
   ],

@@ -80,7 +80,7 @@ export default function TechnologiePage() {
                   Schnellere Reaktion
                 </p>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Analyse und Incident Response werden operativ unterstuetzt.
+                  Analyse und Incident Response werden operativ unterstützt.
                 </p>
               </div>
             </div>
@@ -100,7 +100,7 @@ export default function TechnologiePage() {
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
               Sehen Sie im kurzen Walkthrough, wie AZURITES Sicherheitsdaten
               zusammenführt, Alerts analysiert und Security Operations
-              unterstuetzt.
+              unterstützt.
             </p>
           </div>
 
@@ -117,7 +117,7 @@ export default function TechnologiePage() {
                 label="English captions"
                 default
               />
-              Ihr Browser unterstuetzt das Video-Tag nicht.
+              Ihr Browser unterstützt das Video-Tag nicht.
             </video>
           </div>
 

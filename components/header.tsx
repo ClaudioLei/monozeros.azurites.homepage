@@ -19,7 +19,7 @@ const navigation = [
   { name: "Hosting & Compliance", href: "/hosting-compliance" },
   { name: "Technologie", href: "/technologie" },
   { name: "Assessment", href: "/assessment" },
-  { name: "Ueber uns", href: "/ueber-uns" },
+  { name: "Über uns", href: "/ueber-uns" },
 ]
 
 export function Header() {
@@ -87,7 +87,7 @@ export function Header() {
           className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-foreground lg:hidden"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
-          <span className="sr-only">Menue oeffnen</span>
+          <span className="sr-only">Menü öffnen</span>
           {mobileMenuOpen ? (
             <X className="h-6 w-6" aria-hidden="true" />
           ) : (

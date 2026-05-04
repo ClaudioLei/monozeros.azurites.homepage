@@ -8,7 +8,7 @@ const footerLinks = {
     { name: "Technologie", href: "/technologie" },
   ],
   company: [
-    { name: "Ueber uns", href: "/ueber-uns" },
+    { name: "Über uns", href: "/ueber-uns" },
     { name: "Assessment", href: "/assessment" },
     { name: "Kontakt", href: "/kontakt" },
   ],
@@ -34,8 +34,8 @@ export function Footer() {
               </span>
             </Link>
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-              Schweizer Cybersecurity mit operativer Realitaet. Managed
-              Detection & Response für Unternehmen ohne eigenes SOC.
+              Schweizer Cybersecurity mit operativer Realität. Managed Detection
+              & Response für Unternehmen ohne eigenes SOC.
             </p>
             <div className="mt-6 space-y-3">
               <div className="flex items-center gap-3 text-sm text-muted-foreground">

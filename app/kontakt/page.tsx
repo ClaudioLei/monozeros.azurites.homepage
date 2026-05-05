@@ -18,31 +18,25 @@ import { Textarea } from "@/components/ui/textarea"
 import { TurnstileWidget } from "@/components/turnstile-widget"
 
 const contactInfo = [
-  {
-    icon: Mail,
-    label: "Email",
-    value: "info@monozeros.ch",
-    href: "mailto:info@monozeros.ch",
-  },
-  {
-    icon: Phone,
-    label: "Telefon",
-    value: "+41 44 300 12 34",
-    href: "tel:+41443001234",
-  },
-  {
-    icon: MapPin,
-    label: "Adresse",
-    value: "Hirschenstrasse 18\n9200 Gossau",
-    href: null,
-  },
-  {
-    icon: Clock,
-    label: "SOC Status",
-    value: "24/7 Operational",
-    href: null,
-  },
-]
+    {
+      icon: Mail,
+      label: "Email",
+      value: "info@monozeros.ch",
+      href: "mailto:info@monozeros.ch",
+    },
+    {
+      icon: MapPin,
+      label: "Adresse",
+      value: "Hirschenstrasse 18\n9200 Gossau",
+      href: null,
+    },
+    {
+      icon: Clock,
+      label: "SOC Status",
+      value: "24/7 SOC-Monitoring über Cynclair/AZURITES",
+      href: null,
+    },
+  ]
 
 const roleOptions = [
   "CEO / Geschäftsleitung",

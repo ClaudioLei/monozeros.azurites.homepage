@@ -23,12 +23,12 @@ export const metadata: Metadata = {
 }
 
 const services = [
-  {
-    icon: Eye,
-    title: "24/7 Monitoring",
-    description:
-      "Kontinuierliche Überwachung Ihrer gesamten IT-Infrastruktur durch erfahrene Security-Analysten. Keine Lücken, keine blinden Flecken.",
-  },
+    {
+      icon: Eye,
+      title: "24/7 Monitoring",
+      description:
+        "Kontinuierliche Überwachung der angebundenen Systeme, Logquellen und Security-Tools. Die Abdeckung richtet sich nach dem vereinbarten Scope und den verfügbaren Integrationen.",
+    },
   {
     icon: Search,
     title: "Threat Hunting",
@@ -47,12 +47,12 @@ const services = [
     description:
       "Kontinuierliche Optimierung der Erkennungsregeln. Weniger False Positives, bessere Detection.",
   },
-  {
-    icon: FileText,
-    title: "Executive Reporting",
-    description:
-      "Verständliche Reports für Management und Verwaltungsrat. Compliance-ready und audit-tauglich.",
-  },
+    {
+      icon: FileText,
+      title: "Executive Reporting",
+      description:
+        "Verständliche Reports für Management und Verwaltungsrat. Unterstützt Compliance- und Audit-Prozesse durch strukturierte Reports, nachvollziehbare Incident-Dokumentation und definierte Eskalationsabläufe.",
+    },
   {
     icon: Users,
     title: "Security Ansprechpartner",

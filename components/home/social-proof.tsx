@@ -4,7 +4,7 @@ const segments = [
   {
     icon: Building2,
     title: "Regulierte Organisationen",
-    description: "Healthcare, Finance und öffentliche Institutionen vertrauen auf unsere Compliance-nahen Prozesse"
+    description: "Die zugrunde liegende Cynclair/AZURITES-Plattform wird in regulierten Branchen eingesetzt. Monozeros fokussiert sich auf die Anforderungen Schweizer Unternehmen in Bereichen wie Healthcare, Finance, Public Sector und Industrie."
   },
   {
     icon: Network,
@@ -35,7 +35,7 @@ export function SocialProof() {
             Für anspruchsvolle Organisationen
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Monozeros betreut Unternehmen, die höchste Ansprüche an Sicherheit, Compliance und Professionalität stellen.
+            Die zugrunde liegende Cynclair/AZURITES-Plattform wird in regulierten Branchen eingesetzt. Monozeros fokussiert sich auf die Anforderungen Schweizer Unternehmen in Bereichen wie Healthcare, Finance, Public Sector und Industrie.
           </p>
         </div>
 
@@ -57,10 +57,10 @@ export function SocialProof() {
         {/* Industry logos placeholder */}
         <div className="mt-16 border-t border-border/40 pt-12">
           <p className="text-center text-sm text-muted-foreground mb-8">
-            Branchen, die wir betreuen
+            Fokusbranchen
           </p>
           <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6">
-            {["Healthcare", "Industrie", "Finance", "Public Sector", "IT Services"].map((industry) => (
+            {["Healthcare", "Finance", "Public Sector", "Industrie", "Professionelle Dienstleister"].map((industry) => (
               <div
                 key={industry}
                 className="text-lg font-medium text-muted-foreground/50 hover:text-muted-foreground transition-colors"

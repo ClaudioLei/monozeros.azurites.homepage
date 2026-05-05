@@ -11,42 +11,43 @@ import {
 
 import { Button } from "@/components/ui/button"
 
-const solutions = [
-  {
-    icon: Eye,
-    title: "Monitoring",
-    description: "Kontinuierliche Überwachung Ihrer gesamten IT-Infrastruktur",
-  },
-  {
-    icon: Filter,
-    title: "Alert Triage",
-    description:
-      "Intelligente Filterung und Priorisierung aller Sicherheitsmeldungen",
-  },
-  {
-    icon: Search,
-    title: "Investigation",
-    description:
-      "Tiefgehende Analyse verdächtiger Aktivitäten durch erfahrene Analysten",
-  },
-  {
-    icon: Bell,
-    title: "Eskalation",
-    description:
-      "Schnelle, strukturierte Eskalation an die richtigen Ansprechpartner",
-  },
-  {
-    icon: Shield,
-    title: "Response Koordination",
-    description: "Professionelle Koordination aller Gegenmassnahmen",
-  },
-  {
-    icon: FileText,
-    title: "Reporting",
-    description:
-      "Executive Reports für Management und Compliance-Nachweise",
-  },
-]
+    const solutions = [
+    {
+      icon: Eye,
+      title: "Monitoring",
+      description:
+        "Kontinuierliche Überwachung der angebundenen Systeme, Logquellen und Security-Tools. Die Abdeckung richtet sich nach dem vereinbarten Scope und den verfügbaren Integrationen.",
+    },
+    {
+      icon: Filter,
+      title: "Alert Triage",
+      description:
+        "Intelligente Filterung und Priorisierung aller Sicherheitsmeldungen",
+    },
+    {
+      icon: Search,
+      title: "Investigation",
+      description:
+        "Tiefgehende Analyse verdächtiger Aktivitäten durch erfahrene Analysten",
+    },
+    {
+      icon: Bell,
+      title: "Eskalation",
+      description:
+        "Schnelle, strukturierte Eskalation an die richtigen Ansprechpartner",
+    },
+    {
+      icon: Shield,
+      title: "Response Koordination",
+      description: "Professionelle Koordination aller Gegenmassnahmen",
+    },
+    {
+      icon: FileText,
+      title: "Reporting",
+      description:
+        "Executive Reports für Management und Compliance-Nachweise",
+    },
+  ]
 
 export function SolutionSection() {
   return (

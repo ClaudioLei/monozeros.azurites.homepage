@@ -13,11 +13,11 @@ const trustItems = [
     label: "Schweizer Ansprechpartner",
     description: "Lokales Onboarding und Support",
   },
-  {
-    icon: BadgeCheck,
-    label: "ISO/IEC 27001",
-    description: "Zertifizierte Informationssicherheit",
-  },
+    {
+      icon: BadgeCheck,
+      label: "Sicherheitsprozesse nach etablierten Standards",
+      description: "Ausgerichtet an ISO/IEC 27001, NIST und bewährten MDR-Betriebsprozessen",
+    },
   {
     icon: Cloud,
     label: "Flexible Hostingmodelle",

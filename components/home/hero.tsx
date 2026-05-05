@@ -44,11 +44,11 @@ export function Hero() {
            <div className="mt-16 flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
              <div className="flex items-center gap-2 text-sm text-muted-foreground">
                <Shield className="h-5 w-5 text-primary" />
-               <span>24/7 SOC-Monitoring</span>
+               <span>24/7 SOC-Monitoring über Cynclair/AZURITES</span>
              </div>
              <div className="flex items-center gap-2 text-sm text-muted-foreground">
                <Lock className="h-5 w-5 text-primary" />
-               <span>Deutschsprachige Kundenbetreuung</span>
+               <span>Deutschsprachige Kundenbetreuung gemäss SLA</span>
              </div>
              <div className="flex items-center gap-2 text-sm text-muted-foreground">
                <Eye className="h-5 w-5 text-primary" />

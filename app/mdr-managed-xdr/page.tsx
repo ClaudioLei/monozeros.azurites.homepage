@@ -91,7 +91,7 @@ const benefits = [
   "Kalkulierbare monatliche Kosten",
   "Zugang zu Security-Expertenwissen",
   "24/7 Abdeckung ohne Schichtbetrieb",
-  "Schweizer Ansprechpartner und Datenhaltung",
+  "Schweizer Ansprechpartner, Schweizer Datenhaltung optional",
 ]
 
 export default function MDRPage() {

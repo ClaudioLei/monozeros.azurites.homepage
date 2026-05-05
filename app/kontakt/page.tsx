@@ -30,12 +30,6 @@ const contactInfo = [
       value: "Hirschenstrasse 18\n9200 Gossau",
       href: null,
     },
-    {
-      icon: Clock,
-      label: "SOC Status",
-      value: "24/7 SOC-Monitoring über Cynclair/AZURITES",
-      href: null,
-    },
   ]
 
 const roleOptions = [

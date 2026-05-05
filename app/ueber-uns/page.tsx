@@ -32,7 +32,7 @@ const values = [
   {
     icon: Award,
     title: "Schweizer Qualität",
-    description: "Lokale Präsenz, deutschsprachiger Service, Schweizer Datenschutz."
+    description: "Lokale Präsenz, deutschsprachige Betreuung und strukturierte Datenschutz- und Sicherheitsprozesse."
   },
 ]
 
@@ -155,7 +155,7 @@ export default function AboutPage() {
                  Lokal verankert, international vernetzt
                </h3>
                <p className="mt-4 text-muted-foreground leading-relaxed">
-                 Unser Hauptsitz ist in Gossau SG. Von hier aus betreuen wir Unternehmen in der gesamten Schweiz. Unsere Infrastruktur läuft in Schweizer Rechenzentren, unsere Analysten sprechen Deutsch.
+                 Unser Hauptsitz ist in Gossau SG. Von hier aus betreuen wir Unternehmen in der gesamten Schweiz. Der Standardbetrieb erfolgt über die Cynclair/AZURITES-Infrastruktur, ein dediziertes Schweizer Hosting-Modell ist auf Anfrage möglich. Unsere Ansprechpartner betreuen Kunden deutschsprachig.
                </p>
               <div className="mt-8 flex items-center gap-6 text-sm">
                 <div className="flex items-center gap-2">

@@ -1,23 +1,25 @@
-import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
+import { Header } from "@/components/header"
+import { getLegalMarkdownBlocks, LegalMarkdown } from "@/lib/legal-markdown"
 
 export const metadata = {
   title: "Impressum | Monozeros",
 }
 
-export default function ImpressumPage() {
+export default async function ImpressumPage() {
+  const blocks = await getLegalMarkdownBlocks("IMPRESSUM.md")
+
   return (
     <main className="min-h-screen">
       <Header />
-      <section className="mx-auto max-w-3xl px-6 pb-24 pt-32 lg:pt-40">
-        <h1 className="text-4xl font-bold tracking-tight text-foreground">Impressum</h1>
-        <div className="mt-8 space-y-5 text-muted-foreground">
-          <p>Monozeros GmbH</p>
-          <p>Hirschenstrasse 18</p>
-          <p>9200 Gossau</p>
-          <p>Schweiz</p>
-          <p>Handelsregister-Nr.: CH-320.4.081.054-9</p>
+      <section className="mx-auto max-w-4xl px-6 pb-24 pt-32 lg:pt-40">
+        <div className="space-y-4">
+          <p className="text-sm font-medium uppercase tracking-[0.22em] text-muted-foreground">
+            Rechtliches
+          </p>
+          <h1 className="text-4xl font-bold tracking-tight text-foreground">Impressum</h1>
         </div>
+        <LegalMarkdown blocks={blocks} />
       </section>
       <Footer />
     </main>

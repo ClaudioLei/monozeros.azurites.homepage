@@ -30,6 +30,12 @@ const contactInfo = [
     value: "Hirschenstrasse 18\n9200 Gossau",
     href: null,
   },
+  {
+    icon: Phone,
+    label: "Telefon",
+    value: "+41 71 232 65 66",
+    href: "tel:+41712326566",
+  },
 ]
 
 const roleOptions = [

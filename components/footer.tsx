@@ -61,7 +61,7 @@ export function Footer() {
                    href="tel:+41443001234"
                    className="transition-colors hover:text-foreground"
                  >
-                   +41 44 300 12 34
+                   +41 71 232 65 66
                  </a>
                </div>
              </div>

@@ -30,18 +30,18 @@ export default function HostingPage() {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-3xl" />
 
           <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
-           <div className="mx-auto max-w-3xl text-center">
-             <div className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-card px-4 py-1.5 text-sm text-muted-foreground mb-8">
-               <Server className="h-4 w-4 text-primary" />
-               Flexible Betriebsmodelle
-             </div>
-             <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl text-balance">
-               Hosting & Compliance
-             </h1>
-             <p className="mt-6 text-lg leading-relaxed text-muted-foreground max-w-2xl mx-auto text-pretty">
-               Der Standardbetrieb erfolgt über die Cynclair/AZURITES-Infrastruktur. Für Kunden mit erhöhten regulatorischen Anforderungen bieten wir auf Anfrage ein dediziertes Schweizer Hosting-Modell in AWS Europe/Zürich oder Azure Switzerland an.
-             </p>
-           </div>
+            <div className="mx-auto max-w-3xl text-center">
+              <div className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-card px-4 py-1.5 text-sm text-muted-foreground mb-8">
+                <Server className="h-4 w-4 text-primary" />
+                Flexible Betriebsmodelle
+              </div>
+              <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl text-balance">
+                Hosting & Compliance
+              </h1>
+              <p className="mt-6 text-lg leading-relaxed text-muted-foreground max-w-2xl mx-auto text-pretty">
+                Der Standardbetrieb erfolgt über die Cynclair/AZURITES-Infrastruktur. Für Kunden mit erhöhten regulatorischen Anforderungen bieten wir auf Anfrage ein dediziertes Schweizer Hosting-Modell in AWS Europe/Zürich oder Azure Switzerland an.
+              </p>
+            </div>
           </div>
         </section>
 
@@ -94,7 +94,7 @@ export default function HostingPage() {
                 <div className="flex items-center gap-4 pt-6 border-t border-border/40">
                   <Zap className="h-5 w-5 text-primary" />
                   <span className="text-sm text-muted-foreground">
-                    Go-live in wenigen Tagen möglich
+                    Schneller Projektstart bei bereitgestellten Zugängen und definiertem Scope
                   </span>
                 </div>
               </div>
@@ -125,7 +125,7 @@ export default function HostingPage() {
                 <ul className="space-y-4 mb-8">
                   {[
                     "AWS Schweiz (Zürich Region)",
-                    "Daten verbleiben in der Schweiz",
+                    "Schweizer Datenhaltung gemäss Vertrag und technischem Betriebsmodell",
                     "Für regulierte Branchen",
                     "Dedizierte Infrastruktur",
                     "Ideal für sensible Workloads",

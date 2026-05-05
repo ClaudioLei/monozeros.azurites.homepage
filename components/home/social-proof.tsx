@@ -9,7 +9,7 @@ const segments = [
   {
     icon: Network,
     title: "Komplexe IT-Landschaften",
-    description: "Multi-Cloud, On-Premise und hybride Umgebungen – wir integrieren alles"
+    description: "Multi-Cloud, On-Premise und hybride Umgebungen – Integration relevanter Systeme gemäss vereinbartem Scope."
   },
   {
     icon: TrendingUp,

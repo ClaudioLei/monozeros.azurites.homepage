@@ -11,43 +11,44 @@ import {
 
 import { Button } from "@/components/ui/button"
 
-    const solutions = [
-    {
-      icon: Eye,
-      title: "Monitoring",
-      description:
-        "Kontinuierliche Überwachung der angebundenen Systeme, Logquellen und Security-Tools. Die Abdeckung richtet sich nach dem vereinbarten Scope und den verfügbaren Integrationen.",
-    },
-    {
-      icon: Filter,
-      title: "Alert Triage",
-      description:
-        "Intelligente Filterung und Priorisierung aller Sicherheitsmeldungen",
-    },
-    {
-      icon: Search,
-      title: "Investigation",
-      description:
-        "Tiefgehende Analyse verdächtiger Aktivitäten durch erfahrene Analysten",
-    },
-    {
-      icon: Bell,
-      title: "Eskalation",
-      description:
-        "Schnelle, strukturierte Eskalation an die richtigen Ansprechpartner",
-    },
-    {
-      icon: Shield,
-      title: "Response Koordination",
-      description: "Professionelle Koordination aller Gegenmassnahmen",
-    },
-    {
-      icon: FileText,
-      title: "Reporting",
-      description:
-        "Executive Reports für Management und Compliance-Nachweise",
-    },
-  ]
+const solutions = [
+  {
+    icon: Eye,
+    title: "Monitoring",
+    description:
+      "Kontinuierliche Überwachung der angebundenen Systeme, Logquellen und Security-Tools. Die Abdeckung richtet sich nach dem vereinbarten Scope und den verfügbaren Integrationen.",
+  },
+  {
+    icon: Filter,
+    title: "Alert Triage",
+    description:
+      "Intelligente Filterung und Priorisierung aller Sicherheitsmeldungen",
+  },
+  {
+    icon: Search,
+    title: "Investigation",
+    description:
+      "Tiefgehende Analyse verdächtiger Aktivitäten durch erfahrene Analysten",
+  },
+  {
+    icon: Bell,
+    title: "Eskalation",
+    description:
+      "Schnelle, strukturierte Eskalation an die richtigen Ansprechpartner",
+  },
+  {
+    icon: Shield,
+    title: "Response Koordination",
+    description:
+      "Professionelle Koordination vereinbarter Gegenmassnahmen",
+  },
+  {
+    icon: FileText,
+    title: "Reporting",
+    description:
+      "Executive Reports für Management und Compliance-Unterstützung",
+  },
+]
 
 export function SolutionSection() {
   return (
@@ -63,9 +64,9 @@ export function SolutionSection() {
             </h2>
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
               Wir sind Ihr externer Security-Service-Partner. Von der
-              Überwachung bis zur Response-Koordination kümmern wir uns um Ihre
-              IT-Sicherheit, damit Sie sich auf Ihr Kerngeschäft konzentrieren
-              können.
+              Überwachung bis zur Response-Koordination unterstützen wir Ihre
+              Security Operations, damit Sie sich auf Ihr Kerngeschäft
+              konzentrieren können.
             </p>
 
             <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -133,9 +134,11 @@ export function SolutionSection() {
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">MTTR</span>
+                  <span className="text-sm text-muted-foreground">
+                    Response
+                  </span>
                   <span className="font-mono text-sm text-foreground">
-                    12 Min
+                    gemäss SLA
                   </span>
                 </div>
                 <div className="mt-6 border-t border-border/40 pt-4">

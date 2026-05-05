@@ -18,19 +18,19 @@ import { Textarea } from "@/components/ui/textarea"
 import { TurnstileWidget } from "@/components/turnstile-widget"
 
 const contactInfo = [
-    {
-      icon: Mail,
-      label: "Email",
-      value: "info@monozeros.ch",
-      href: "mailto:info@monozeros.ch",
-    },
-    {
-      icon: MapPin,
-      label: "Adresse",
-      value: "Hirschenstrasse 18\n9200 Gossau",
-      href: null,
-    },
-  ]
+  {
+    icon: Mail,
+    label: "Email",
+    value: "info@monozeros.ch",
+    href: "mailto:info@monozeros.ch",
+  },
+  {
+    icon: MapPin,
+    label: "Adresse",
+    value: "Hirschenstrasse 18\n9200 Gossau",
+    href: null,
+  },
+]
 
 const roleOptions = [
   "CEO / Geschäftsleitung",
@@ -229,7 +229,7 @@ export default function KontaktPage() {
 
               <div className="mt-12 rounded-xl border border-border/60 bg-card p-6">
                 <h3 className="mb-3 font-semibold text-foreground">
-                  Schnelle Antwort garantiert
+                  Wir melden uns schnellstmöglich
                 </h3>
                 <p className="text-sm text-muted-foreground">
                   Wir antworten in der Regel innerhalb von 24 Stunden. Für

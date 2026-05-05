@@ -23,23 +23,23 @@ export const metadata: Metadata = {
 }
 
 const services = [
-    {
-      icon: Eye,
-      title: "24/7 Monitoring",
-      description:
-        "Kontinuierliche Überwachung der angebundenen Systeme, Logquellen und Security-Tools. Die Abdeckung richtet sich nach dem vereinbarten Scope und den verfügbaren Integrationen.",
-    },
+  {
+    icon: Eye,
+    title: "24/7 Monitoring",
+    description:
+      "Kontinuierliche Überwachung der angebundenen Systeme, Logquellen und Security-Tools. Die Abdeckung richtet sich nach dem vereinbarten Scope und den verfügbaren Integrationen.",
+  },
   {
     icon: Search,
     title: "Threat Hunting",
     description:
-      "Proaktive Suche nach versteckten Bedrohungen in Ihrem Netzwerk. Wir finden Angreifer, bevor sie Schaden anrichten.",
+      "Proaktive Suche nach versteckten Bedrohungen in Ihrer Umgebung. Ziel ist es, verdächtige Aktivitäten frühzeitig zu erkennen und Risiken zu reduzieren.",
   },
   {
     icon: Shield,
     title: "Incident Handling",
     description:
-      "Schnelle, professionelle Reaktion auf Sicherheitsvorfälle. Von der Erkennung bis zur Eindämmung koordinieren wir alles.",
+      "Schnelle, professionelle Unterstützung bei Sicherheitsvorfällen. Von der Erkennung bis zur Eindämmung koordinieren wir die vereinbarten Massnahmen und Eskalationsschritte.",
   },
   {
     icon: Target,
@@ -47,12 +47,12 @@ const services = [
     description:
       "Kontinuierliche Optimierung der Erkennungsregeln. Weniger False Positives, bessere Detection.",
   },
-    {
-      icon: FileText,
-      title: "Executive Reporting",
-      description:
-        "Verständliche Reports für Management und Verwaltungsrat. Unterstützt Compliance- und Audit-Prozesse durch strukturierte Reports, nachvollziehbare Incident-Dokumentation und definierte Eskalationsabläufe.",
-    },
+  {
+    icon: FileText,
+    title: "Executive Reporting",
+    description:
+      "Verständliche Reports für Management und Verwaltungsrat. Unterstützt Compliance- und Audit-Prozesse durch nachvollziehbare Incident-Dokumentation.",
+  },
   {
     icon: Users,
     title: "Security Ansprechpartner",
@@ -91,7 +91,7 @@ const benefits = [
   "Kalkulierbare monatliche Kosten",
   "Zugang zu Security-Expertenwissen",
   "24/7 Abdeckung ohne Schichtbetrieb",
-  "Schweizer Ansprechpartner, Schweizer Datenhaltung optional",
+  "Schweizer Ansprechpartner und optionales Schweizer Hosting",
 ]
 
 export default function MDRPage() {
@@ -235,7 +235,7 @@ export default function MDRPage() {
                 </span>
               </div>
               <h3 className="text-2xl font-bold text-foreground">
-                In wenigen Tagen einsatzbereit
+                Schneller Projektstart bei bereitgestellten Zugängen und definiertem Scope
               </h3>
               <p className="mt-4 text-muted-foreground">
                 Kein langwieriger Aufbau. Wir integrieren Ihre Systeme und

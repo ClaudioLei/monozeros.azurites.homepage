@@ -6,9 +6,13 @@ import * as ResizablePanels from 'react-resizable-panels'
 
 import { cn } from '@/lib/utils'
 
-const PanelGroup = ResizablePanels.PanelGroup
-const Panel = ResizablePanels.Panel
-const PanelResizeHandle = ResizablePanels.PanelResizeHandle
+type PanelComponent = React.ComponentType<React.HTMLAttributes<HTMLDivElement> & Record<string, unknown>>
+
+const { PanelGroup, Panel, PanelResizeHandle } = ResizablePanels as unknown as {
+  PanelGroup: PanelComponent
+  Panel: PanelComponent
+  PanelResizeHandle: PanelComponent
+}
 
 function ResizablePanelGroup({
   className,

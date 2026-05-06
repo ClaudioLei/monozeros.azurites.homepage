@@ -143,6 +143,16 @@ export default function AssessmentPage() {
       phone: formData.phone,
       topic: "Public MDR Assessment",
       message,
+      publicAssessment: {
+        employees: formData.employees || null,
+        endpoints: formData.endpoints || null,
+        servers: formData.servers || null,
+        industry: formData.industry || null,
+        cloudUsage: formData.cloudUsage || null,
+        securityTools: formData.securityTools,
+        needs24x7: formData.needs24x7,
+        complianceRequired: formData.complianceRequired,
+      },
       privacyAccepted: true,
       turnstileToken,
     }

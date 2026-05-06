@@ -34,17 +34,18 @@ export async function POST(request: NextRequest) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     })
+
+    const result = await response.json().catch(() => null)
     if (!response.ok) {
-      // If the backend returns an error, we forward it
       return NextResponse.json(
-        { 
-          success: false, 
-          error: `Backend error: ${response.statusText}` 
+        result || {
+          success: false,
+          error: `Backend error: ${response.statusText}`
         },
         { status: response.status }
       )
     }
-    const result = await response.json()
+
     return NextResponse.json(result, { status: response.status })
   } catch (error) {
     console.error('Contact submission error:', error)

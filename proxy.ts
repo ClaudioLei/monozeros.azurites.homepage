@@ -3,11 +3,11 @@ import { NextResponse, type NextRequest } from "next/server"
 function buildCsp(nonce: string, isDev: boolean) {
   return [
     "default-src 'self'",
-    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://challenges.cloudflare.com${isDev ? " 'unsafe-eval'" : ""}`,
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://challenges.cloudflare.com https://www.googletagmanager.com${isDev ? " 'unsafe-eval'" : ""}`,
     `style-src 'self' 'nonce-${nonce}'`,
-    "img-src 'self' blob: data:",
+    "img-src 'self' blob: data: https://www.google-analytics.com",
     "font-src 'self' data:",
-    "connect-src 'self' https://challenges.cloudflare.com",
+    "connect-src 'self' https://challenges.cloudflare.com https://www.google-analytics.com https://region1.google-analytics.com",
     "media-src 'self' https://www.cynclair.com",
     "frame-src https://challenges.cloudflare.com",
     "object-src 'none'",

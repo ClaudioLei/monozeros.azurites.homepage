@@ -165,6 +165,49 @@ Falls auf der Website keine Analyse-, Marketing- oder Tracking-Tools eingesetzt 
 
 ## 10. Eingesetzte Dienste und Drittanbieter
 
+### Google Analytics
+
+Sofern Sie auf unseren oeffentlichen Marketingseiten zustimmen, verwenden wir
+Google Analytics 4, einen Webanalysedienst von Google. Google Analytics hilft
+uns zu verstehen, welche Inhalte genutzt werden, wie Besucher auf unsere
+Website gelangen und welche Seiten technisch oder inhaltlich verbessert werden
+sollten.
+
+Google Analytics wird auf unserer Website erst nach Ihrer ausdruecklichen
+Einwilligung aktiviert. Ohne Ihre Zustimmung findet kein Analytics-Tracking
+statt. Ihre Entscheidung koennen Sie jederzeit ueber die Cookie-Einstellungen
+auf der Website fuer die Zukunft aendern oder widerrufen.
+
+Im Rahmen der Nutzung von Google Analytics koennen insbesondere folgende Daten
+bearbeitet werden:
+
+* aufgerufene Seiten
+* technische Informationen zu Browser, Geraet und Bildschirm
+* ungefaehre Standortdaten auf Basis gekuerzter IP-bezogener Informationen
+* Referrer-Informationen
+* Nutzungsinteraktionen und Zeitpunkte
+
+Wir verwenden Google Analytics mit aktivierter IP-Anonymisierung bzw.
+vergleichbaren datenschutzbezogenen Einstellungen. Dennoch kann nicht
+ausgeschlossen werden, dass Daten durch Google auch in Staaten ausserhalb der
+Schweiz bzw. des EWR bearbeitet werden, insbesondere in den USA.
+
+Anbieterin des Dienstes ist Google Ireland Limited, Gordon House, Barrow
+Street, Dublin 4, Irland. Es kann nicht ausgeschlossen werden, dass Google LLC
+in den USA als Empfaengerin oder Unterauftragsbearbeiterin eingebunden ist.
+
+Weitere Informationen zur Datenbearbeitung durch Google finden Sie in den
+Datenschutzinformationen von Google:
+
+https://policies.google.com/privacy
+
+und in den Informationen zu Google Analytics:
+
+https://support.google.com/analytics
+
+Die Rechtsgrundlage fuer den Einsatz von Google Analytics ist Ihre
+Einwilligung, soweit eine solche erforderlich ist.
+
 Wir können Dienstleister beiziehen, die uns beim Betrieb der Website, bei Kommunikation, Hosting, IT-Sicherheit, Buchhaltung, Support oder bei der Erbringung unserer Dienstleistungen unterstützen.
 
 Mögliche Kategorien von Empfängern sind:

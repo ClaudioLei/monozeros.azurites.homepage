@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { Mail, Phone, MapPin, Clock, Check, Send } from "lucide-react"
+import { Mail, Phone, MapPin, Check, Send } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"

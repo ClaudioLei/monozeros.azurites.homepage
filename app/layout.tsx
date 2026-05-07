@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { headers } from "next/headers"
 
+import { AnalyticsConsentManager } from "@/components/analytics-consent-manager"
 import { CspNonceProvider } from "@/components/csp-nonce-provider"
 import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css"
@@ -36,7 +37,12 @@ export default async function RootLayout({
   const nonce = (await headers()).get("x-nonce")
 
   return (
-    <html lang="de" suppressHydrationWarning className="bg-background">
+    <html
+      lang="de"
+      suppressHydrationWarning
+      className="bg-background"
+      data-scroll-behavior="smooth"
+    >
       <body className="font-sans antialiased">
         <CspNonceProvider nonce={nonce}>
           <ThemeProvider
@@ -47,6 +53,7 @@ export default async function RootLayout({
             nonce={nonce ?? undefined}
           >
             {children}
+            <AnalyticsConsentManager />
           </ThemeProvider>
         </CspNonceProvider>
       </body>

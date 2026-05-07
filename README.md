@@ -49,13 +49,16 @@ Lege eine `.env.local` an:
 ```env
 BACKEND_URL=http://localhost:3001
 NEXT_PUBLIC_TURNSTILE_SITE_KEY=1x00000000000000000000AA
+NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
 ```
 
 Hinweise:
 
 - `BACKEND_URL` ist erforderlich fuer Kontaktformular, Token-Validierung, Closed-Assessment-Submission und Admin-Rewrite.
 - `NEXT_PUBLIC_TURNSTILE_SITE_KEY` wird fuer `/kontakt`, `/assessment` und den tokenbasierten Assessment-Client verwendet.
+- `NEXT_PUBLIC_GA_MEASUREMENT_ID` aktiviert Google Analytics 4 auf den freigegebenen Marketingseiten.
 - Ohne `NEXT_PUBLIC_TURNSTILE_SITE_KEY` werden die Formulare nicht korrekt nutzbar sein; die UI zeigt dann an, dass die Sicherheitspruefung nicht konfiguriert ist.
+- Ohne `NEXT_PUBLIC_GA_MEASUREMENT_ID` wird weder Analytics noch das Consent-Banner geladen.
 
 ### 3. Dev-Server starten
 
@@ -134,6 +137,14 @@ Zusatz:
 
 - `next.config.mjs` rewritet `/api/admin/:path*` an `${BACKEND_URL}/api/admin/:path*`, sofern `BACKEND_URL` gesetzt ist.
 - Wenn `BACKEND_URL` fehlt, liefern die lokalen API-Routen fuer diese Flows bewusst Fehler statt Mock-Erfolge.
+
+## Analytics und Consent
+
+- Google Analytics 4 wird nur auf ausgewaehlten oeffentlichen Marketingseiten geladen.
+- Assessment-, Success-, Admin- und tokenbasierte Flows sind in Phase 1 explizit ausgeschlossen.
+- Das Tracking startet erst nach ausdruecklicher Zustimmung ueber das Consent-Banner.
+- Die Cookie-Einstellungen koennen anschliessend ueber den Footer erneut geoeffnet werden.
+- Fuer den Einsatz von Analytics wurden zusaetzliche CSP-Freigaben in `proxy.ts` hinterlegt.
 
 ## Assessments
 
